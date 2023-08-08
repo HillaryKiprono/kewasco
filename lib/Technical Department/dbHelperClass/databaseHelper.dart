@@ -58,7 +58,7 @@ class DatabaseHelper {
     ActivityName TEXT
     )''');
     await db.execute('''
-    CREATE TABLE $_fieldActivity (
+    CREATE TABLE fieldActivities_tbl (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       CategoryName TEXT,
       AssetName TEXT,
@@ -66,7 +66,8 @@ class DatabaseHelper {
       WorkerName TEXT,
       Date TEXT,
       Time TEXT,
-      Status TEXT
+      Status TEXT,
+      Comments TEXT
     )
   ''');
   }

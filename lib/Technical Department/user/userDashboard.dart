@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import '../api_endpoints/api_connections.dart';
 import '../dbHelperClass/databaseHelper.dart';
 
-
 class UserDashboard extends StatefulWidget {
   @override
   _UserDashboardState createState() => _UserDashboardState();
@@ -17,7 +16,7 @@ class UserDashboard extends StatefulWidget {
 
 class _UserDashboardState extends State<UserDashboard> {
   // bool showHiddenInput = false; // Add this line
-  TextEditingController reasons=TextEditingController();
+  TextEditingController reasons = TextEditingController();
   bool syncing = false;
   double syncProgress = 0.0;
   String? selectedCategory;
@@ -25,8 +24,14 @@ class _UserDashboardState extends State<UserDashboard> {
   String? selectedActivity;
   String? selectedWorker;
   String? selectedStatus;
+  String? selectedComments;
 
-  final List<String> statusSelection = ['Done','Incomplete'];
+  final List<String> statusSelection = ['Done', 'Incomplete'];
+  final List<String> commentsSelection = [
+    "No Materials",
+    "Climatic factors",
+    "Other"
+  ];
   List<Map<String, dynamic>> data = [];
   List<Map<String, dynamic>> workerData = [];
   List<String> categories = [];
@@ -35,14 +40,14 @@ class _UserDashboardState extends State<UserDashboard> {
   List<String> workers = [];
   List<String> savedActivities = [];
   List<String> selectedActivities = [];
-  List<String> showInsertedActivity=[];
-
+  List<String> showInsertedActivity = [];
 
   Future<void> fetchData() async {
     if (categories.isEmpty) {
       final dbHelper = DatabaseHelper.instance;
 
-      final List<Map<String, dynamic>> categoryData = await dbHelper.queryData();
+      final List<Map<String, dynamic>> categoryData =
+          await dbHelper.queryData();
       final List<String> fetchedCategories = categoryData
           .map((record) => record['CategoryName'] as String)
           .toSet()
@@ -54,13 +59,12 @@ class _UserDashboardState extends State<UserDashboard> {
     }
   }
 
-
   Future<void> fetchAssets() async {
     final dbHelper = DatabaseHelper.instance;
 
     if (selectedCategory != null) {
       final List<Map<String, dynamic>> assetData =
-      await dbHelper.queryAssets(selectedCategory!);
+          await dbHelper.queryAssets(selectedCategory!);
       final Set<String> fetchedAssets = Set<String>.from(
           assetData.map((record) => record['AssetName'] as String));
 
@@ -69,7 +73,6 @@ class _UserDashboardState extends State<UserDashboard> {
       });
     }
   }
-
 
   // Future<void> fetchAssets() async {
   //   final dbHelper = DatabaseHelper.instance;
@@ -105,7 +108,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
     if (selectedAsset != null) {
       final List<Map<String, dynamic>> activityData =
-      await dbHelper.queryActivities(selectedAsset!);
+          await dbHelper.queryActivities(selectedAsset!);
       final Set<String> fetchedActivities = Set<String>.from(
           activityData.map((record) => record['ActivityName'] as String));
 
@@ -115,20 +118,16 @@ class _UserDashboardState extends State<UserDashboard> {
     }
   }
 
-
   Future<void> fetchWorkerName() async {
     final dbHelper = DatabaseHelper.instance;
-    final List<Map<String, dynamic>> workerData =
-    await dbHelper.queryWorkers();
+    final List<Map<String, dynamic>> workerData = await dbHelper.queryWorkers();
     final List<String> fetchedWorkers =
-    workerData.map((record) => record['workerName'] as String).toList();
+        workerData.map((record) => record['workerName'] as String).toList();
 
     setState(() {
       workers = fetchedWorkers;
     });
   }
-
-
 
   Future<void> saveActivity(BuildContext context) async {
     // Check if any of the fields is empty
@@ -136,6 +135,7 @@ class _UserDashboardState extends State<UserDashboard> {
         selectedAsset == null ||
         selectedActivity == null ||
         selectedWorker == null ||
+        selectedComments == null ||
         selectedStatus == null) {
       Fluttertoast.showToast(msg: "Please fill in all fields.");
       return;
@@ -168,7 +168,7 @@ class _UserDashboardState extends State<UserDashboard> {
                 try {
                   await db.transaction((txn) async {
                     await txn.rawInsert(
-                      'INSERT INTO fieldActivities_tbl(CategoryName, AssetName, ActivityName, WorkerName, Status, Date, Time) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                      'INSERT INTO fieldActivities_tbl(CategoryName, AssetName, ActivityName, WorkerName, Status, Date, Time,Comments) VALUES (?, ?, ?, ?, ?, ?, ?,?)',
                       [
                         selectedCategory,
                         selectedAsset,
@@ -177,13 +177,14 @@ class _UserDashboardState extends State<UserDashboard> {
                         selectedStatus,
                         DateFormat('yyyy-MM-dd').format(DateTime.now()),
                         DateFormat('HH:mm:ss').format(DateTime.now()),
+                        selectedComments
                       ],
                     );
                   });
                   // Show a success message or perform any other actions
                   Fluttertoast.showToast(msg: "Activity saved successfully");
                 } catch (e) {
-                  // Handle the exception and show an error message
+                  print("Error saving activity: $e");
                   Fluttertoast.showToast(
                       msg: "Failed to save activity. Please try again.");
                 }
@@ -195,7 +196,6 @@ class _UserDashboardState extends State<UserDashboard> {
       },
     );
   }
-
 
   Future<bool> checkConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -212,10 +212,10 @@ class _UserDashboardState extends State<UserDashboard> {
       return false;
     }
   }
-  void syncDataToMySQL() async {
 
+  void syncDataToMySQL() async {
     Database database = await openDatabase(
-      join(await getDatabasesPath(), 'kewasco.db'),
+      join(await getDatabasesPath(), 'maintenance.db'),
     );
 
     List<Map<String, dynamic>> data = await database.query('_fieldActivity');
@@ -232,14 +232,18 @@ class _UserDashboardState extends State<UserDashboard> {
         'Status': row['Status'],
         'Date': row['Date'],
         'Time': row['Time'],
+        'Comments': row['Comments'],
       });
       uploadedRows++;
       double percentage = (uploadedRows / totalRows) * 100;
-      Fluttertoast.showToast(msg: "Please be Patient While Uploading data to the Server and ensure you have strong Internet connections Uploading: ${percentage.toStringAsFixed(2)}%");
+      Fluttertoast.showToast(
+          msg:
+              "Please be Patient While Uploading data to the Server and ensure you have strong Internet connections Uploading: ${percentage.toStringAsFixed(2)}%");
     }
     // Clear data after successful upload
     await database.delete('fieldActivities_tbl');
   }
+
   @override
   void initState() {
     super.initState();
@@ -256,7 +260,6 @@ class _UserDashboardState extends State<UserDashboard> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -393,7 +396,6 @@ class _UserDashboardState extends State<UserDashboard> {
                             selectedActivity = value;
                           });
                         },
-
                         items: activities.map((activity) {
                           return DropdownMenuItem<String>(
                             value: activity,
@@ -470,23 +472,57 @@ class _UserDashboardState extends State<UserDashboard> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
 
-
-                // Hidden Input
-                if (selectedStatus == 'Incomplete')
-                  Padding(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: TextField(
-                      controller: reasons,
-                      decoration: InputDecoration(
-                        labelText: 'Reasons',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(width: 2, color: Colors.grey),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: selectedComments,
+                          hint: const Text('Select Comments'),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedComments = value;
+                            });
+                          },
+                          items: commentsSelection.map((comments) {
+                            return DropdownMenuItem<String>(
+                              value: comments,
+                              child: Text(comments),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
                   ),
+                ),
+
+                // // Hidden Input
+                // if (selectedStatus == 'Incomplete')
+                //   Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 15),
+                //     child: TextField(
+                //       controller: reasons,
+                //       decoration: InputDecoration(
+                //         labelText: 'Reasons',
+                //         border: OutlineInputBorder(
+                //           borderRadius: BorderRadius.circular(20),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
                 const Divider(
                   height: 4,
                   thickness: 4,
@@ -510,7 +546,9 @@ class _UserDashboardState extends State<UserDashboard> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 15.0,),
+                const SizedBox(
+                  height: 15.0,
+                ),
                 //*****************Time Default**********************//
                 Padding(
                   padding: const EdgeInsets.only(left: 40.0, right: 40.0),
@@ -527,36 +565,35 @@ class _UserDashboardState extends State<UserDashboard> {
                 ),
 
                 //****************Submit Button*****************
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
 
                 ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     saveActivity(context);
                   },
                   child: const Text("Save the Activity"),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
 
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FieldActivityTableScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => FieldActivityTableScreen()),
                     );
                   },
                   child: const Text("Display Stored Field Activities"),
                 ),
-
-
-
-
               ],
             ),
           ),
         ),
       ),
     );
-
   }
 }
-

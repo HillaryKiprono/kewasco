@@ -46,7 +46,7 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
 
     for (var row in data) {
       try {
-        var url="http://${Config.ipAddress}/Kewasco_API/Technical_modules/upload_activity.php";
+        var url="http://${Config.ipAddress}/Maintenance_Activity_API/modules/upload_activity.php";
         var response = await http.post(
             Uri.parse(url),
             body: {
@@ -128,6 +128,7 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
             DataColumn(label: Text('Activity Name')),
             DataColumn(label: Text('Worker Name')),
             DataColumn(label: Text('Status')),
+            DataColumn(label: Text('Comments')),
             DataColumn(label: Text('Date')),
             DataColumn(label: Text('Time')),
             DataColumn(label: Text('Action')),
@@ -141,6 +142,7 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
               DataCell(Text(activity['ActivityName'])),
               DataCell(Text(activity['WorkerName'])),
               DataCell(Text(activity['Status'])),
+              DataCell(Text(activity['Comments'])),
               DataCell(Text(activity['Date'])),
               DataCell(Text(activity['Time'])),
               DataCell(Row(
