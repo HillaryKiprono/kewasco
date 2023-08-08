@@ -275,12 +275,7 @@ class _UserDashboardState extends State<UserDashboard> {
               },
             ),
           ],
-          // leading: IconButton(
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          //   icon: const Icon(Icons.arrow_back),
-          // ),
+
         ),
         body: Container(
           margin: const EdgeInsets.only(top: 30.0),
@@ -318,27 +313,7 @@ class _UserDashboardState extends State<UserDashboard> {
                         }).toList(),
                       ),
 
-                      // DropdownButton<String>(
-                      //   isExpanded: true,
-                      //   value: selectedCategory,
-                      //   hint: const Text('Select Category'),
-                      //   onChanged: (value) {
-                      //     setState(() {
-                      //       selectedCategory = value;
-                      //       selectedAsset = null;
-                      //       selectedActivity = null;
-                      //       assets = []; // Clear assets when category changes
-                      //
-                      //     });
-                      //     fetchAssets();
-                      //   },
-                      //   items: categories.map((category) {
-                      //     return DropdownMenuItem<String>(
-                      //       value: category,
-                      //       child: Text(category),
-                      //     );
-                      //   }).toList(),
-                      // ),
+
                     ),
                   ),
                 ),
@@ -509,20 +484,6 @@ class _UserDashboardState extends State<UserDashboard> {
                   ),
                 ),
 
-                // // Hidden Input
-                // if (selectedStatus == 'Incomplete')
-                //   Padding(
-                //     padding: const EdgeInsets.symmetric(horizontal: 15),
-                //     child: TextField(
-                //       controller: reasons,
-                //       decoration: InputDecoration(
-                //         labelText: 'Reasons',
-                //         border: OutlineInputBorder(
-                //           borderRadius: BorderRadius.circular(20),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
                 const Divider(
                   height: 4,
                   thickness: 4,
