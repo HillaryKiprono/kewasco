@@ -11,6 +11,8 @@ class DatabaseHelper {
 
   DatabaseHelper._privateConstructor();
 
+  DatabaseHelper();
+
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   static Database? _database;
@@ -49,26 +51,24 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-      CREATE TABLE $_tblData (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        CategoryName TEXT,
-        AssetName TEXT,
-        ActivityName TEXT
-      )
-    ''');
-
+    CREATE TABLE $_tblData(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    CategoryName TEXT,
+    AssetName TEXT,
+    ActivityName TEXT
+    )''');
     await db.execute('''
-      CREATE TABLE $_fieldActivity (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        CategoryName TEXT,
-        AssetName TEXT,
-        ActivityName TEXT,
-        WorkerName TEXT,
-        Date TEXT,
-        Time TEXT,
-        Status TEXT
-      )
-    ''');
+    CREATE TABLE $_fieldActivity (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      CategoryName TEXT,
+      AssetName TEXT,
+      ActivityName TEXT,
+      WorkerName TEXT,
+      Date TEXT,
+      Time TEXT,
+      Status TEXT
+    )
+  ''');
   }
 
   Future<void> clearTables() async {
@@ -115,15 +115,22 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> queryActivities(String assetName) async {
     final db = await instance.database;
-    return await db
-        .query('tblData', where: 'AssetName = ?', whereArgs: [assetName]);
+    return await db.query(
+        'tblData', where: 'AssetName = ?', whereArgs: [assetName]);
   }
+
+  // Future<List<Map<String, dynamic>>> queryAssets(String categoryName) async {
+  //   final db = await database;
+  //   return await db.query(
+  //       'tblData', where: 'CategoryName = ?', whereArgs: [categoryName]);
+  // }
 
   Future<List<Map<String, dynamic>>> queryAssets(String categoryName) async {
     final db = await database;
-    return await db
-        .query('tblData', where: 'CategoryName = ?', whereArgs: [categoryName]);
+    return await db.query(
+        'tblData', where: 'CategoryName = ?', whereArgs: [categoryName]);
   }
+
 
   Future<List<Map<String, dynamic>>> queryWorkersName() async {
     final db = await instance.database;
@@ -146,4 +153,8 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
+
+
+
 }
