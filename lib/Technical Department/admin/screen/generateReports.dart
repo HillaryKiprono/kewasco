@@ -287,6 +287,12 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                     padding: const pdfWidgets.EdgeInsets.all(2),
                     child: pdfWidgets.Text(item['Status']),
                   ),
+
+                  //add ths Column for Comments
+                  pdfWidgets.Padding(
+                    padding: const pdfWidgets.EdgeInsets.all(2),
+                    child: pdfWidgets.Text(item['Comments']),
+                  ),
                 ],
               ),
             );
@@ -322,6 +328,12 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                       padding: const pdfWidgets.EdgeInsets.all(2),
                       child: pdfWidgets.Text(item['Status']),
                     ),
+
+                    //add this line for Comments
+                    pdfWidgets.Padding(
+                      padding: const pdfWidgets.EdgeInsets.all(2),
+                      child: pdfWidgets.Text(item['Comments']),
+                    ),
                   ],
                 ),
               );
@@ -353,6 +365,13 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                       padding: const pdfWidgets.EdgeInsets.all(2),
                       child: pdfWidgets.Text(item['Status']),
                     ),
+
+                   // Add this line for Comments
+
+                    pdfWidgets.Padding(
+                      padding: const pdfWidgets.EdgeInsets.all(2),
+                      child: pdfWidgets.Text(item['Comments']),
+                    ),
                   ],
                 ),
               );
@@ -383,6 +402,8 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
           3: const pdfWidgets.FlexColumnWidth(5),
           4: const pdfWidgets.FlexColumnWidth(5),
           5: const pdfWidgets.FlexColumnWidth(5),
+          // I added this for Comments
+          6: const pdfWidgets.FlexColumnWidth(5),
         },
         children: [
           pdfWidgets.TableRow(
@@ -444,6 +465,18 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                 padding: const pdfWidgets.EdgeInsets.all(2),
                 child: pdfWidgets.Text(
                   'STATUS REPORT',
+                  style: pdfWidgets.TextStyle(
+                    fontWeight: pdfWidgets.FontWeight.bold,
+                    fontSize: 8,
+                  ),
+                ),
+              ),
+
+              // I added this for Comments section
+              pdfWidgets.Padding(
+                padding: const pdfWidgets.EdgeInsets.all(2),
+                child: pdfWidgets.Text(
+                  'Comments',
                   style: pdfWidgets.TextStyle(
                     fontWeight: pdfWidgets.FontWeight.bold,
                     fontSize: 8,
@@ -520,6 +553,12 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                     padding: const pdfWidgets.EdgeInsets.all(2),
                     child: pdfWidgets.Text(item['Status']),
                   ),
+
+                  // I added this for Comments
+                  pdfWidgets.Padding(
+                    padding: const pdfWidgets.EdgeInsets.all(2),
+                    child: pdfWidgets.Text(item['Comments']),
+                  ),
                 ],
               ),
             );
@@ -555,6 +594,12 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                       padding: const pdfWidgets.EdgeInsets.all(2),
                       child: pdfWidgets.Text(item['Status']),
                     ),
+
+                    // i Added this for Comments
+                    pdfWidgets.Padding(
+                      padding: const pdfWidgets.EdgeInsets.all(2),
+                      child: pdfWidgets.Text(item['Comments']),
+                    ),
                   ],
                 ),
               );
@@ -585,6 +630,12 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                     pdfWidgets.Padding(
                       padding: const pdfWidgets.EdgeInsets.all(2),
                       child: pdfWidgets.Text(item['Status']),
+                    ),
+
+                    // I added this for Comments
+                    pdfWidgets.Padding(
+                      padding: const pdfWidgets.EdgeInsets.all(2),
+                      child: pdfWidgets.Text(item['Comments']),
                     ),
                   ],
                 ),
@@ -676,6 +727,18 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                 padding: const pdfWidgets.EdgeInsets.all(2),
                 child: pdfWidgets.Text(
                   'STATUS REPORT',
+                  style: pdfWidgets.TextStyle(
+                    fontWeight: pdfWidgets.FontWeight.bold,
+                    fontSize: 8,
+                  ),
+                ),
+              ),
+
+              //Comment section
+              pdfWidgets.Padding(
+                padding: const pdfWidgets.EdgeInsets.all(2),
+                child: pdfWidgets.Text(
+                  'Comments',
                   style: pdfWidgets.TextStyle(
                     fontWeight: pdfWidgets.FontWeight.bold,
                     fontSize: 8,

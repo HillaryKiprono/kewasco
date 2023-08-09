@@ -8,14 +8,14 @@ import 'package:kewasco/Technical%20Department/admin/widget/responsive_layout.da
 import 'screen/admin_main_modules_screen.dart';
 import 'screen/generateReports.dart';
 
-class WidgetTree extends StatefulWidget {
-  WidgetTree({super.key});
-
+class AdminDashboard extends StatefulWidget {
+  AdminDashboard({super.key, required this.username});
+final String username;
   @override
-  State<WidgetTree> createState() => _WidgetTreeState();
+  State<AdminDashboard> createState() => _AdminDashboardState();
 }
 
-class _WidgetTreeState extends State<WidgetTree> {
+class _AdminDashboardState extends State<AdminDashboard> {
   int currentIndex = 1;
 
   final List<Widget> _icons = const [

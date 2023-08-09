@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kewasco/Technical%20Department/admin/widget/addWorker.dart';
 
 import '../resource/app_colors.dart';
 import '../resource/app_padding.dart';
+import '../widget/addSupervisor.dart';
 import '../widget/bar_chat.dart';
 
 class Person {
@@ -69,7 +71,9 @@ class _PanelCenterScreenState extends State<PanelCenterScreen> {
                   )),
             ),
 
-            // BarChartSample2(),
+             AddWorker(),
+            AddSupervisor()
+            //  BarChartSample2(),
             // Padding(
             //   padding: const EdgeInsets.only(
             //       left: AppPadding.P10 / 2,

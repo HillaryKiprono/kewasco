@@ -66,6 +66,8 @@ dependencies:
   line_chart: ^1.1.11
   percent_indicator: ^4.2.3
   ternav_icons: ^1.0.0
+  davi: ^3.4.0
+  flutter_expandable_table: ^2.0.0
 
 dev_dependencies:
   flutter_test:

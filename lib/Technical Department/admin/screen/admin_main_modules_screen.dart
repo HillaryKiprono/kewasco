@@ -22,14 +22,7 @@ class PanelLeftScreen extends StatefulWidget {
 }
 
 class _PanelLeftScreenState extends State<PanelLeftScreen> {
-  final List<Todo> _todos = [
-    Todo(name: "Purchase Paper", enable: true),
-    Todo(name: "Refill the inventory of speakers", enable: true),
-    Todo(name: "Hire someone", enable: true),
-    Todo(name: "Maketing Strategy", enable: true),
-    Todo(name: "Selling furniture", enable: true),
-    Todo(name: "Finish the disclosure", enable: true),
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +44,8 @@ class _PanelLeftScreenState extends State<PanelLeftScreen> {
               ),
             ),
           SingleChildScrollView(
-            child: Column(
+            child:
+            Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
