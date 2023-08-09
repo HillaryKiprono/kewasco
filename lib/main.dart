@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kewasco/Technical%20Department/admin/widget/testpdf.dart';
+
 import 'package:kewasco/Technical%20Department/admin/widget/uploadDataToSqflite.dart';
 import 'package:kewasco/Technical%20Department/user/userDashboard.dart';
 import 'package:kewasco/login_screen.dart';
 import 'package:kewasco/sign_in.dart';
+import 'package:kewasco/splashscreen.dart';
 
 import 'Technical Department/Meter Store/meter_records.dart';
 import 'Technical Department/admin/admin_dashboard.dart';
@@ -25,7 +26,7 @@ class MainApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.black
       ),
       // home:  UploadDataToSqflite(),
-     home:  LoginScreen(),
+     home:  SplashScreen(),
    //  home: AdminDashboard(username: "Hillary"),
 
     );

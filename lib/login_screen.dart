@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:kewasco/Technical%20Department/admin/resource/app_colors.dart';
@@ -10,6 +11,8 @@ import 'Technical Department/api_endpoints/api_connections.dart';
 import 'Technical Department/dbHelperClass/databaseHelper.dart';
 import 'Technical Department/user/userDashboard.dart';
 import 'package:flutter/widgets.dart';
+
+import 'config.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -104,105 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // void loginInAndroid(BuildContext context) async {
-  //   final String username = _usernameController.text;
-  //   final String password = _passwordController.text;
-  //
-  //   try {
-  //     var databasesPath = await getDatabasesPath();
-  //     var path = join(databasesPath, 'maintenance.db');
-  //
-  //     var database = await openDatabase(
-  //       path,
-  //       version: 1,
-  //       onCreate: (db, version) async {
-  //         // Database creation code...
-  //       },
-  //     );
-  //
-  //     var result = await database.query(
-  //       'tblLogins',
-  //       where: 'username = ? AND password = ?',
-  //       whereArgs: [username, password],
-  //     );
-  //
-  //     if (result.isNotEmpty) {
-  //       final role = result.first['role'].toString();
-  //
-  //       if (role == 'Admin') {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) => AdminDashboard(username: username)),
-  //         );
-  //         _showSuccessDialog(context); // Show success dialogue for admin login
-  //       } else if (role == 'User') {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(builder: (context) => UserDashboard()),
-  //         );
-  //         _showSuccessDialog(context); // Show success dialogue for user login
-  //       } else {
-  //         _showErrorDialog(
-  //             context); // Show error dialogue for unknown role or error
-  //       }
-  //     } else {
-  //       _showErrorDialog(
-  //           context); // Show error dialogue for incorrect username or password
-  //     }
-  //
-  //     await database.close();
-  //   } catch (e) {
-  //     print('Error fetching items from local storage: $e');
-  //     // showFailureDialog(context);
-  //   }
-  // }
 
-  // void loginInAndroid(BuildContext context) async {
-  //   final String username = _usernameController.text;
-  //   final String password = _passwordController.text;
-  //
-  //   if (storedData == null || storedData!.isEmpty) {
-  //     try {
-  //       final role = await loginInDesktop(username, password);
-  //       handleLogin(context, role);
-  //     } catch (e) {
-  //       print('Error fetching items from backend API: $e');
-  //       _showErrorDialog(context);
-  //     }
-  //   } else {
-  //     try {
-  //       var databasesPath = await getDatabasesPath();
-  //       var path = join(databasesPath, 'kewasco.db');
-  //
-  //       var database = await openDatabase(
-  //         path,
-  //         version: 1,
-  //         onCreate: (db, version) async {
-  //           // Database creation code...
-  //         },
-  //       );
-  //
-  //       var result = await database.query(
-  //         'tblLogins',
-  //         where: 'username = ? AND password = ?',
-  //         whereArgs: [username, password],
-  //       );
-  //
-  //       if (result.isNotEmpty) {
-  //         final role = result.first['role'].toString();
-  //         handleLogin(context, role);
-  //       } else {
-  //         _showErrorDialog(context); // Show error dialogue for incorrect username or password
-  //       }
-  //
-  //       await database.close();
-  //     } catch (e) {
-  //       print('Error fetching items from local storage: $e');
-  //       _showErrorDialog(context);
-  //     }
-  //   }
-  // }
 
   void handleLogin(BuildContext context, String role) {
     if (role == 'Admin') {
@@ -274,10 +179,142 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+   _openDownloadDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Download Data'),
+          content: Text('Would you like to download the data?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+
+                _downloadData(context); // Close the dialog
+                // Perform download logic here
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // method to fetched data from server
+  Future<void> fetchDataStoreInDatabase() async {
+    const url1 =
+        'http://${Config.ipAddress}/Maintenance_Activity_API/modules/fetchData.php';
+    const url2 =
+        'http://${Config.ipAddress}/Maintenance_Activity_API/modules/fetchWorker.php';
+    const url3 =
+        'http://${Config.ipAddress}/Maintenance_Activity_API/modules/fetchLogins.php';
+
+    try {
+      final response1 = await http.get(Uri.parse(url1));
+      final response2 = await http.get(Uri.parse(url2));
+      final response3 = await http.get(Uri.parse(url3));
+      if (response1.statusCode == 200 &&
+          response2.statusCode == 200 &&
+          response3.statusCode == 200) {
+        final data1 = jsonDecode(response1.body);
+        final data2 = jsonDecode(response2.body);
+        final data3 = jsonDecode(response3.body);
+
+        await DatabaseHelper.instance.clearTables();
+
+        for (var item in data3) {
+          final row3 = {
+            'id': item['id'],
+            'username': item['username'],
+            'password': item['password'],
+            'role': item['role']
+          };
+          await DatabaseHelper.instance.insertLogins(row3);
+        }
+
+        for (var item2 in data2) {
+          final row2 = {
+            'id': item2['id'],
+            'workerName': item2['workerName']
+          };
+          await DatabaseHelper.instance.insertWorkers(row2);
+        }
+
+        for(var item1 in data1){
+          final row1={
+            'id': item1['id'],
+            'CategoryName':item1['CategoryName'],
+            'AssetName':item1['AssetName'],
+            'ActivityName':item1['ActivityName'],
+          };
+          await DatabaseHelper.instance.insertData(row1);
+        }
+
+        // Fluttertoast.showToast(msg: "Uploaded successfully");
+
+      } else {
+        Fluttertoast.showToast(msg: "Failed to connect");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+
+
+  void _downloadData(BuildContext context) async {
+    Navigator.pop(context);
+
+     _openDownloadDialog(context);
+
+    bool wifiConnected = await checkWifiConnectivity();
+
+    if (wifiConnected) {
+      await downloadAndStoreData(context);
+      Fluttertoast.showToast(msg: "Data downloaded successfully");
+      Navigator.pop(context);
+    } else {
+      Fluttertoast.showToast(msg: "Please connect to Wi-Fi before downloading");
+
+    }
+  }
+
+  Future<bool> checkWifiConnectivity() async {
+    // Implement your logic to check Wi-Fi connectivity here
+    // Return true if connected, false if not connected
+    return true; // Placeholder value for demonstration
+  }
+
+  Future<void> downloadAndStoreData(BuildContext context) async {
+    // Implement your logic to download and store data here
+    // You can use the fetchDataStoreInDatabase method as before
+    Navigator.pop(context);
+    await fetchDataStoreInDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white54,
+
+          actions: [
+            IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {
+                _openDownloadDialog(context);
+              },
+            ),
+          ],
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [

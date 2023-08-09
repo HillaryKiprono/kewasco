@@ -950,7 +950,7 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                             },child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Text("Click here to upload"),
+
                                   ElevatedButton(
                                     onPressed: fetchDataStoreInDatabase,
                                     child: const Text("Upload login to phone"),
