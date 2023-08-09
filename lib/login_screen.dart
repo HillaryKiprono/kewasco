@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:kewasco/Technical%20Department/admin/resource/app_colors.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'Technical Department/admin/admin_dashboard.dart';
 import 'Technical Department/api_endpoints/api_connections.dart';
 import 'Technical Department/user/userDashboard.dart';
+import 'package:flutter/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       var databasesPath = await getDatabasesPath();
-      var path = join(databasesPath, 'maintenance.db');
+      var path = join(databasesPath, 'kewasco.db');
 
       var database = await openDatabase(
         path,
@@ -79,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       var result = await database.query(
-        'tblLogin',
+        'tblLogins',
         where: 'username = ? AND password = ?',
         whereArgs: [username, password],
       );
@@ -90,7 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
         if (role == 'Admin') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AdminDashboard(username: username)),
+            MaterialPageRoute(
+                builder: (context) => AdminDashboard(username: username)),
           );
           _showSuccessDialog(context); // Show success dialogue for admin login
         } else if (role == 'User') {
@@ -100,10 +103,12 @@ class _LoginScreenState extends State<LoginScreen> {
           );
           _showSuccessDialog(context); // Show success dialogue for user login
         } else {
-          _showErrorDialog(context); // Show error dialogue for unknown role or error
+          _showErrorDialog(
+              context); // Show error dialogue for unknown role or error
         }
       } else {
-        _showErrorDialog(context); // Show error dialogue for incorrect username or password
+        _showErrorDialog(
+            context); // Show error dialogue for incorrect username or password
       }
 
       await database.close();
@@ -163,7 +168,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (role == 'Admin') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AdminDashboard(username: _usernameController.text)),
+        MaterialPageRoute(
+            builder: (context) =>
+                AdminDashboard(username: _usernameController.text)),
       );
       _showSuccessDialog(context); // Show success dialogue for admin login
     } else if (role == 'User') {
@@ -173,10 +180,10 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       _showSuccessDialog(context); // Show success dialogue for user login
     } else {
-      _showErrorDialog(context); // Show error dialogue for unknown role or error
+      _showErrorDialog(
+          context); // Show error dialogue for unknown role or error
     }
   }
-
 
   Future<String> loginInDesktop(String username, String password) async {
     final response = await http.post(
@@ -201,13 +208,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
     loginInDesktop(username, password).then((role) {
       if (role == 'Admin') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AdminDashboard(username: username)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AdminDashboard(username: username)));
         _showSuccessDialog(context); // Show success dialogue for admin login
       } else if (role == 'User') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UserDashboard()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => UserDashboard()));
         _showSuccessDialog(context); // Show success dialogue for user login
       } else {
-        _showErrorDialog(context); // Show error dialogue for unknown role or error
+        _showErrorDialog(
+            context); // Show error dialogue for unknown role or error
       }
     }).catchError((error) {
       _showErrorDialog(context); // Show error dialogue for failed login
@@ -224,19 +236,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                height: 400,
+                height: 300,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image:
-                        AssetImage('assets/images/water.jpg'),
-                        fit: BoxFit.fill)
-                ),
+                        image: AssetImage('assets/images/water.jpg'),
+                        fit: BoxFit.fill)),
                 child: Stack(
                   children: [
                     Positioned(
@@ -246,8 +256,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Container(
                         decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/light-1.png'))),
+                                image:
+                                    AssetImage('assets/images/light-1.png'))),
                       ),
                     ),
                     Positioned(
@@ -257,8 +267,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Container(
                         decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/light-2.png'))),
+                                image:
+                                    AssetImage('assets/images/light-2.png'))),
                       ),
                     ),
                     Positioned(
@@ -268,9 +278,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 150,
                       child: Container(
                         decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
                             image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/clock.png'))),
+                                image: AssetImage('assets/images/logo.jpeg'))),
                       ),
                     ),
                     Positioned(
@@ -312,26 +322,40 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: const BoxDecoration(
                                 border: Border(
                                     bottom: BorderSide(color: Colors.grey))),
-                            child: TextField(
+                            child: TextFormField(
+
+                              controller: _usernameController,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20)
-                                  ),
-                                  hintText: "Username",
-                                  hintStyle:
-                                  TextStyle(color: Colors.grey[400])),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                hintText: "Username",
+                                hintStyle: TextStyle(color: Colors.grey[400]),
+                              ),
+
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter your username";
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           Container(
                             padding: const EdgeInsets.all(8.0),
-                            child: TextField(
+                            child: TextFormField(
+                              controller: _passwordController,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20)
-                                  ),
+                                      borderRadius: BorderRadius.circular(20)),
                                   hintText: "Password",
                                   hintStyle:
-                                  TextStyle(color: Colors.grey[400])),
+                                      TextStyle(color: Colors.grey[400])),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your password';
+                                }
+                                return null;
+                              },
                             ),
                           )
                         ],
@@ -343,19 +367,38 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       height: 50,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(80),
                           gradient: const LinearGradient(colors: [
                             Color.fromRGBO(143, 148, 251, 1),
                             Color.fromRGBO(143, 148, 251, .6),
                           ])),
-                      child: const Center(
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                      child: SizedBox(
+                        width: 100,
+                        child: ElevatedButton(
+                          onPressed: () {
+
+
+                                checkedOperatingSystem(context);
+
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              onPrimary: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 6),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              textStyle: TextStyle()),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
+
                     const SizedBox(
                       height: 70,
                     ),
@@ -368,6 +411,6 @@ class _LoginScreenState extends State<LoginScreen> {
               )
             ],
           ),
-        ));;
+        ));
   }
 }
