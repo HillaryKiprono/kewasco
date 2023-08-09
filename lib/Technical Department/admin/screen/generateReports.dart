@@ -971,7 +971,12 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                                                   final data = storedData[index];
                                                   return ListTile(
                                                     title: Text("UserName: ${data['username']}"),
-                                                    subtitle: Text("Password : ${data['password']}"),
+                                                    subtitle: Column(
+                                                      children: [
+                                                        Text("Password : ${data['password']}"),
+                                                        Text("role : ${data['role']}"),
+                                                      ],
+                                                    )
                                                   );
                                                 },
                                               ),

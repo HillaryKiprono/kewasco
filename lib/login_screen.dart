@@ -7,8 +7,10 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'Technical Department/admin/admin_dashboard.dart';
 import 'Technical Department/api_endpoints/api_connections.dart';
+import 'Technical Department/dbHelperClass/databaseHelper.dart';
 import 'Technical Department/user/userDashboard.dart';
 import 'package:flutter/widgets.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,6 +26,44 @@ class _LoginScreenState extends State<LoginScreen> {
   List<dynamic> loginData = []; // Variable to store fetched login data
 
   List<dynamic>? storedData;
+
+  void _login(BuildContext context) async {
+    final String username = _usernameController.text;
+    final String password = _passwordController.text;
+
+    try {
+      List<Map<String, dynamic>> result = await DatabaseHelper.instance.queryLoginData(
+        where: 'username = ? AND password = ?',
+        whereArgs: [username, password],
+      );
+
+      if (result.isNotEmpty) {
+        final role = result.first['role'].toString();
+
+        if (role == 'Admin') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AdminDashboard(username: username)),
+          );
+          _showSuccessDialog(context); // Show success dialogue for admin login
+        } else if (role == 'User') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserDashboard()),
+          );
+          _showSuccessDialog(context); // Show success dialogue for user login
+        } else {
+          _showErrorDialog(context); // Show error dialogue for unknown role or error
+        }
+      } else {
+        _showErrorDialog(context); // Show error dialogue for incorrect username or password
+      }
+    } catch (e) {
+      print('Error fetching items from local storage: $e');
+      // Handle the error here
+      _showErrorDialog(context);
+    }
+  }
 
   void _showSuccessDialog(BuildContext context) {
     showDialog(
@@ -64,59 +104,59 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void loginInAndroid(BuildContext context) async {
-    final String username = _usernameController.text;
-    final String password = _passwordController.text;
-
-    try {
-      var databasesPath = await getDatabasesPath();
-      var path = join(databasesPath, 'kewasco.db');
-
-      var database = await openDatabase(
-        path,
-        version: 1,
-        onCreate: (db, version) async {
-          // Database creation code...
-        },
-      );
-
-      var result = await database.query(
-        'tblLogins',
-        where: 'username = ? AND password = ?',
-        whereArgs: [username, password],
-      );
-
-      if (result.isNotEmpty) {
-        final role = result.first['role'].toString();
-
-        if (role == 'Admin') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AdminDashboard(username: username)),
-          );
-          _showSuccessDialog(context); // Show success dialogue for admin login
-        } else if (role == 'User') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => UserDashboard()),
-          );
-          _showSuccessDialog(context); // Show success dialogue for user login
-        } else {
-          _showErrorDialog(
-              context); // Show error dialogue for unknown role or error
-        }
-      } else {
-        _showErrorDialog(
-            context); // Show error dialogue for incorrect username or password
-      }
-
-      await database.close();
-    } catch (e) {
-      print('Error fetching items from local storage: $e');
-      // showFailureDialog(context);
-    }
-  }
+  // void loginInAndroid(BuildContext context) async {
+  //   final String username = _usernameController.text;
+  //   final String password = _passwordController.text;
+  //
+  //   try {
+  //     var databasesPath = await getDatabasesPath();
+  //     var path = join(databasesPath, 'maintenance.db');
+  //
+  //     var database = await openDatabase(
+  //       path,
+  //       version: 1,
+  //       onCreate: (db, version) async {
+  //         // Database creation code...
+  //       },
+  //     );
+  //
+  //     var result = await database.query(
+  //       'tblLogins',
+  //       where: 'username = ? AND password = ?',
+  //       whereArgs: [username, password],
+  //     );
+  //
+  //     if (result.isNotEmpty) {
+  //       final role = result.first['role'].toString();
+  //
+  //       if (role == 'Admin') {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: (context) => AdminDashboard(username: username)),
+  //         );
+  //         _showSuccessDialog(context); // Show success dialogue for admin login
+  //       } else if (role == 'User') {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => UserDashboard()),
+  //         );
+  //         _showSuccessDialog(context); // Show success dialogue for user login
+  //       } else {
+  //         _showErrorDialog(
+  //             context); // Show error dialogue for unknown role or error
+  //       }
+  //     } else {
+  //       _showErrorDialog(
+  //           context); // Show error dialogue for incorrect username or password
+  //     }
+  //
+  //     await database.close();
+  //   } catch (e) {
+  //     print('Error fetching items from local storage: $e');
+  //     // showFailureDialog(context);
+  //   }
+  // }
 
   // void loginInAndroid(BuildContext context) async {
   //   final String username = _usernameController.text;
@@ -228,7 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void checkedOperatingSystem(BuildContext context) {
     if (Platform.isAndroid) {
-      loginInAndroid(context);
+      _login(context);
     } else {
       _handleLoginDesktop(context);
     }
@@ -374,7 +414,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ])),
                       child: SizedBox(
                         width: 100,
-                        child: ElevatedButton(
+                        child:
+                        ElevatedButton(
                           onPressed: () {
 
 

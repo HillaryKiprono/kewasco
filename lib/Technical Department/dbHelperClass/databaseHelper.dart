@@ -155,6 +155,19 @@ class DatabaseHelper {
     );
   }
 
+  Future<List<Map<String, dynamic>>> queryLoginData({
+    required String where,
+    required List<dynamic> whereArgs,
+  }) async {
+    final db = await instance.database;
+    return await db.query(
+      _tblLogin,
+      where: where,
+      whereArgs: whereArgs,
+    );
+  }
+
+
 
 
 
