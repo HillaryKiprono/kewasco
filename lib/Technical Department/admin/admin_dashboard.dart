@@ -64,11 +64,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ],
         ),
       ),
-      drawer: const DrawerScreen(),
+      // drawer: const DrawerScreen(),
       bottomNavigationBar: ResponsiveLayout.isPhoneLimit(context)
           ? CurvedNavigationBar(
               backgroundColor: AppColors.purpleDark,
-              color: Colors.white24,
+              color: AppColors.bg,
               index: currentIndex,
               items: _icons,
               onTap: (index) {

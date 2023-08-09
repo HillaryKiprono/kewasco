@@ -794,16 +794,7 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                     "Generating Reports",
                     style: TextStyle(color: Colors.white),
                   ),
-                  // subtitle: Text(
-                  //   "7% of Sales Avg.",
-                  //   style: TextStyle(color: Colors.white),
-                  // ),
-                  // trailing: Chip(
-                  //   label: Text(
-                  //     r"$46,450",
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  // ),
+
                 ),
               ),
             ),
@@ -893,7 +884,7 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(right: 16, left: 6),
-                            child: ElevatedButton(onPressed: (){},child: Text("Generate Excel"),),
+                            child: ElevatedButton(onPressed: (){generateExcelFromXAMPP();},child: Text("click here to Generate Excel"),),
                           ),
                         ),
                         const SizedBox(
