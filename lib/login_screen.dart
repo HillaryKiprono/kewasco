@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'Technical Department/admin/admin_dashboard.dart';
 import 'Technical Department/api_endpoints/api_connections.dart';
 import 'Technical Department/user/userDashboard.dart';
@@ -235,8 +234,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         image:
-                        AssetImage('assets/images/background.png'),
-                        fit: BoxFit.fill)),
+                        AssetImage('assets/images/water.jpg'),
+                        fit: BoxFit.fill)
+                ),
                 child: Stack(
                   children: [
                     Positioned(

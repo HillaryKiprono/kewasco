@@ -59,7 +59,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           children: const [
              // Expanded(child: DrawerScreen()),
              Expanded(child: PanelLeftScreen()),
-            // Expanded(child: PanelCenterScreen()),
+             Expanded(child: PanelCenterScreen()),
             Expanded(child: PanelRightScreen())
           ],
         ),
