@@ -3,15 +3,10 @@ import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:kewasco/Technical%20Department/admin/resource/app_colors.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'Technical Department/admin/admin_dashboard.dart';
 import 'Technical Department/api_endpoints/api_connections.dart';
 import 'Technical Department/dbHelperClass/databaseHelper.dart';
 import 'Technical Department/user/userDashboard.dart';
-import 'package:flutter/widgets.dart';
-
 import 'config.dart';
 
 

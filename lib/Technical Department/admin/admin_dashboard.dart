@@ -1,7 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:kewasco/Technical%20Department/admin/resource/app_colors.dart';
-import 'package:kewasco/Technical%20Department/admin/screen/drawer_screen.dart';
 import 'package:kewasco/Technical%20Department/admin/screen/panel_center_screen.dart';
 import 'package:kewasco/Technical%20Department/admin/widget/custom_app_bar.dart';
 import 'package:kewasco/Technical%20Department/admin/widget/responsive_layout.dart';
@@ -42,21 +41,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
             : currentIndex == 1
                 ? const PanelCenterScreen()
                 : const PanelRightScreen(),
-        tablet: Row(
-          children: const [
+        tablet: const Row(
+          children: [
             Expanded(child: PanelLeftScreen()),
             Expanded(child: PanelRightScreen())
           ],
         ),
-        largeTablet: Row(
-          children: const [
+        largeTablet: const Row(
+          children: [
             Expanded(child: PanelLeftScreen()),
-          //  Expanded(child: PanelCenterScreen()),
+           Expanded(child: PanelCenterScreen()),
             Expanded(child: PanelRightScreen())
           ],
         ),
-        computer: Row(
-          children: const [
+        computer: const Row(
+          children: [
              // Expanded(child: DrawerScreen()),
              Expanded(child: PanelLeftScreen()),
              Expanded(child: PanelCenterScreen()),

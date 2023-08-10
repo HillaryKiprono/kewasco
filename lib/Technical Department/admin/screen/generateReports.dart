@@ -944,7 +944,7 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
 
                                   ElevatedButton(
                                     onPressed: fetchDataStoreInDatabase,
-                                    child: const Text("Upload login to phone"),
+                                    child: const Text("Upload Data to phone"),
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {

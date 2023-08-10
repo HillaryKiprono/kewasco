@@ -1,6 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kewasco/Technical%20Department/admin/resource/app_colors.dart';
 import 'package:kewasco/Technical%20Department/dbHelperClass/databaseHelper.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -207,17 +208,33 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
         ),
       ),
 
+floatingActionButton: RawMaterialButton(
+  shape: StadiumBorder(),
+  onPressed: checkConnectivity,
+  fillColor: AppColors.bg1,
+  child: Padding(
+    padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal: 20),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.sync,color: Colors.white,),
+        SizedBox(width: 20,),
+        Text("Upload to Server",style: TextStyle(color: Colors.white),),
+      ],
+    ),
+  ),
 
-      floatingActionButton: Container(
-        width: 150, // Set the width of the container as needed
-        child: FloatingActionButton(
-          onPressed: () {
-            checkConnectivity();
-          },
-          child: Text("Upload to Server"),
-          backgroundColor: Colors.blue, // Change the background color as needed
-        ),
-      ),
+),
+      // floatingActionButton: Container(
+      //   width: 150, // Set the width of the container as needed
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       checkConnectivity();
+      //     },
+      //     child: Text("Upload to Server"),
+      //     backgroundColor: Colors.blue, // Change the background color as needed
+      //   ),
+      // ),
     );
   }
 }
