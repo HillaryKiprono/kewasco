@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
       ),
       // home:  UploadDataToSqflite(),
      home:  SplashScreen(),
-   //  home: AdminDashboard(username: "Hillary"),
+    // home: AdminDashboard(username: "Hillary"),
 
     );
   }

@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../../../config.dart';
 import '../../api_endpoints/api_connections.dart';
 import '../../dbHelperClass/databaseHelper.dart';
