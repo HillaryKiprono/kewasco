@@ -125,7 +125,7 @@ class AddCategoryState extends State {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
+                      const Text(
                         "ADD NEW CATEGORY",
                         style: TextStyle(color: Colors.white),
                       ),

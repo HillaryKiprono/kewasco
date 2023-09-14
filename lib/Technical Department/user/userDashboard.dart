@@ -26,8 +26,11 @@ class _UserDashboardState extends State<UserDashboard> {
   String? selectedStatus;
   String? selectedComments;
 
+
+
   final List<String> statusSelection = ['Done', 'Incomplete'];
   final List<String> commentsSelection = [
+    "Completed",
     "No Materials",
     "Climatic factors",
     "Other"

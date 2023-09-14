@@ -7,7 +7,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
 
-import '../../config.dart';
+import '../api_endpoints/api_connections.dart';
 
 
 
@@ -47,9 +47,8 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
 
     for (var row in data) {
       try {
-        var url="http://${Config.ipAddress}/Maintenance_Activity_API/modules/upload_activity.php";
         var response = await http.post(
-            Uri.parse(url),
+          Uri.parse(API.uploadActivity),
             body: {
               'CategoryName': row['CategoryName'],
               'AssetName': row['AssetName'],
@@ -60,8 +59,23 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
               'Time': row['Time'],
               'Comments': row['Comments'],
 
-
-            });
+            }
+        );
+       // var url="http://${Config.ipAddress}/Maintenance_Activity_API/modules/upload_activity.php";
+       //  var response = await http.post(
+       //      Uri.parse(url),
+       //      body: {
+       //        'CategoryName': row['CategoryName'],
+       //        'AssetName': row['AssetName'],
+       //        'ActivityName': row['ActivityName'],
+       //        'WorkerName': row['WorkerName'],
+       //        'Status': row['Status'],
+       //        'Date': row['Date'],
+       //        'Time': row['Time'],
+       //        'Comments': row['Comments'],
+       //
+       //
+       //      });
         print('Response: ${response.body}');
 
 
@@ -83,7 +97,6 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
       Fluttertoast.showToast(
         msg: "Please be Patient While Uploading data to the Server and ensure you have a strong Internet connection. Uploading: ${percentage.toStringAsFixed(2)}%",
       );
-      print('**************************Request Data: $row');
 
     }
 
@@ -113,7 +126,9 @@ class _FieldActivityTableScreenState extends State<FieldActivityTableScreen> {
         actions: [
           IconButton(
             iconSize: 32,
-            onPressed: () {},
+            onPressed: () {
+              syncDataToMySQL();
+            },
             icon: Icon(Icons.cloud_upload),
 
           ),
