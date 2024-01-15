@@ -11,7 +11,7 @@ import 'package:pdf/widgets.dart' as pdfWidgets;
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
-import '../../api_endpoints/api_connections.dart';
+import '../../api_endpoints/api_connections2.dart';
 import 'generateExcel.dart';
 
 

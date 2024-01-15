@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../config.dart';
-import '../../api_endpoints/api_connections.dart';
+import '../../api_endpoints/api_connections2.dart';
 import '../../dbHelperClass/databaseHelper.dart';
 import '../resource/app_colors.dart';
 import '../resource/app_padding.dart';
@@ -771,310 +771,312 @@ class _PanelRightScreenState extends State<PanelRightScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: AppPadding.P10 / 2,
-                top: AppPadding.P10 / 2,
-                right: AppPadding.P10 / 2),
-            child: Card(
-              color: AppColors.purpleLight,
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Container(
-                width: double.infinity,
-                child: const ListTile(
-                  title: Text(
-                    "Generating Reports",
-                    style: TextStyle(color: Colors.white),
-                  ),
+    // return Scaffold(
+    //   body: SingleChildScrollView(
+    //     child: Column(children: [
+    //       Padding(
+    //         padding: const EdgeInsets.only(
+    //             left: AppPadding.P10 / 2,
+    //             top: AppPadding.P10 / 2,
+    //             right: AppPadding.P10 / 2),
+    //         child: Card(
+    //           color: AppColors.purpleLight,
+    //           elevation: 3,
+    //           shape: RoundedRectangleBorder(
+    //             borderRadius: BorderRadius.circular(50),
+    //           ),
+    //           child: Container(
+    //             width: double.infinity,
+    //             child: const ListTile(
+    //               title: Text(
+    //                 "Generating Reports",
+    //                 style: TextStyle(color: Colors.white),
+    //               ),
+    //
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //
+    //     Card(
+    //       color: AppColors.purpleLight,
+    //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    //       elevation: 3,
+    //       child: AspectRatio(
+    //         aspectRatio: 1.23,
+    //         child: Stack(
+    //           children: <Widget>[
+    //             Column(
+    //               crossAxisAlignment: CrossAxisAlignment.stretch,
+    //               children: <Widget>[
+    //                 const SizedBox(
+    //                   height: 37,
+    //                 ),
+    //                 const Text(
+    //                   'Generate Pdf Report',
+    //                   style: TextStyle(
+    //                     color: Colors.white,
+    //                     fontSize: 32,
+    //                     fontWeight: FontWeight.bold,
+    //                     letterSpacing: 2,
+    //                   ),
+    //                   textAlign: TextAlign.center,
+    //                 ),
+    //                 const SizedBox(
+    //                   height: 37,
+    //                 ),
+    //                 Expanded(
+    //                   child: Padding(
+    //                     padding: const EdgeInsets.only(right: 16, left: 6),
+    //                     child: ElevatedButton(onPressed: (){generatePdf(context);},child: Text("Click here Generate Pdf"),),
+    //                   ),
+    //                 ),
+    //                 const SizedBox(
+    //                   height: 10,
+    //                 ),
+    //
+    //               ],
+    //             ),
+    //
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //
+    //
+    //
+    //       Padding(
+    //         padding: const EdgeInsets.only(
+    //             left: AppPadding.P10 / 2,
+    //             top: AppPadding.P10 / 2,
+    //             right: AppPadding.P10 / 2,
+    //             bottom: AppPadding.P10),
+    //         child:
+    //         Card(
+    //           color: AppColors.purpleLight,
+    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    //           elevation: 3,
+    //           child: AspectRatio(
+    //             aspectRatio: 1.23,
+    //             child: Stack(
+    //               children: <Widget>[
+    //                 Column(
+    //                   crossAxisAlignment: CrossAxisAlignment.stretch,
+    //                   children: <Widget>[
+    //                     const SizedBox(
+    //                       height: 37,
+    //                     ),
+    //                     const Text(
+    //                       'Generate Excel Report',
+    //                       style: TextStyle(
+    //                         color: Colors.white,
+    //                         fontSize: 32,
+    //                         fontWeight: FontWeight.bold,
+    //                         letterSpacing: 2,
+    //                       ),
+    //                       textAlign: TextAlign.center,
+    //                     ),
+    //                     const SizedBox(
+    //                       height: 37,
+    //                     ),
+    //                     Expanded(
+    //                       child: Padding(
+    //                         padding: const EdgeInsets.only(right: 16, left: 6),
+    //                         child: ElevatedButton(onPressed: (){generateExcelFromXAMPP();},child: Text("click here to Generate Excel"),),
+    //                       ),
+    //                     ),
+    //                     const SizedBox(
+    //                       height: 10,
+    //                     ),
+    //                   ],
+    //                 ),
+    //
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //
+    //       Padding(
+    //         padding: const EdgeInsets.only(
+    //             left: AppPadding.P10 / 2,
+    //             top: AppPadding.P10 / 2,
+    //             right: AppPadding.P10 / 2,
+    //             bottom: AppPadding.P10),
+    //         child:
+    //         Card(
+    //           // color: AppColors.purpleLight,
+    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    //           elevation: 3,
+    //           child: AspectRatio(
+    //             aspectRatio: 1.23,
+    //             child: Stack(
+    //               children: <Widget>[
+    //                 Column(
+    //                   crossAxisAlignment: CrossAxisAlignment.stretch,
+    //                   children: <Widget>[
+    //                     const SizedBox(
+    //                       height: 37,
+    //                     ),
+    //                     const Text(
+    //                       'Upload to Phone',
+    //                       style: TextStyle(
+    //                         color: Colors.blue,
+    //                         fontSize: 32,
+    //                         fontWeight: FontWeight.bold,
+    //                         letterSpacing: 2,
+    //                       ),
+    //                       textAlign: TextAlign.center,
+    //                     ),
+    //                     const SizedBox(
+    //                       height: 37,
+    //                     ),
+    //                     Expanded(
+    //                       child: Padding(
+    //                         padding: const EdgeInsets.only(right: 16, left: 6),
+    //                         child: ElevatedButton(onPressed: (){
+    //                           fetchDataStoreInDatabase();
+    //                         },child: SingleChildScrollView(
+    //                           child: Column(
+    //                             children: [
+    //
+    //                               ElevatedButton(
+    //                                 onPressed: fetchDataStoreInDatabase,
+    //                                 child: const Text("Upload Data to phone"),
+    //                               ),
+    //                               ElevatedButton(
+    //                                 onPressed: () async {
+    //                                   final storedData = await fetchStoredLoginsDataFromDatabase();
+    //                                   showDialog(
+    //                                     context: context,
+    //                                     builder: (BuildContext context) {
+    //                                       return AlertDialog(
+    //                                         title: const Text("Stored Logins"),
+    //                                         content: SizedBox(
+    //                                           height: 200,
+    //                                           child: ListView.builder(
+    //                                             itemCount: storedData.length,
+    //                                             itemBuilder: (BuildContext context, int index) {
+    //                                               final data = storedData[index];
+    //                                               return ListTile(
+    //                                                 title: Text("UserName: ${data['username']}"),
+    //                                                 subtitle: Column(
+    //                                                   children: [
+    //                                                     Text("Password : ${data['password']}"),
+    //                                                     Text("role : ${data['role']}"),
+    //                                                   ],
+    //                                                 )
+    //                                               );
+    //                                             },
+    //                                           ),
+    //                                         ),
+    //                                         actions: [
+    //                                           TextButton(
+    //                                             onPressed: () => Navigator.of(context).pop(),
+    //                                             child: const Text("Close"),
+    //                                           ),
+    //                                         ],
+    //                                       );
+    //                                     },
+    //                                   );
+    //                                 },
+    //                                 child: const Text("Display Stored Logins"),
+    //                               ),
+    //
+    //
+    //                               ElevatedButton(
+    //                                 onPressed: () async {
+    //                                   final storedWorkerData = await fetchStoredWorkersFromDatabase();
+    //                                   showDialog(
+    //                                     context: context,
+    //                                     builder: (BuildContext context) {
+    //                                       return AlertDialog(
+    //                                         title: const Text("Stored Worker Data"),
+    //                                         content: SizedBox(
+    //                                           height: 200,
+    //                                           child: ListView.builder(
+    //                                             itemCount: storedWorkerData.length,
+    //                                             itemBuilder: (BuildContext context, int index) {
+    //                                               final data = storedWorkerData[index];
+    //                                               return ListTile(
+    //                                                 title: Text("WorkerName: ${data['workerName']}"),
+    //                                               );
+    //                                             },
+    //                                           ),
+    //                                         ),
+    //                                         actions: [
+    //                                           TextButton(
+    //                                             onPressed: () => Navigator.of(context).pop(),
+    //                                             child: const Text("Close"),
+    //                                           ),
+    //                                         ],
+    //                                       );
+    //                                     },
+    //                                   );
+    //                                 },
+    //                                 child: const Text("Display Workers Stored"),
+    //                               ),
+    //
+    //
+    //                               ElevatedButton(
+    //                                 onPressed: () async {
+    //                                   final storedActivityData = await fetchStoredDataFromDatabase();
+    //                                   showDialog(
+    //                                     context: context,
+    //                                     builder: (BuildContext context) {
+    //                                       return AlertDialog(
+    //                                         title: const Text("Stored Data Activity"),
+    //                                         content: SizedBox(
+    //                                           height: 200,
+    //                                           child: ListView.builder(
+    //                                             itemCount: storedActivityData.length,
+    //                                             itemBuilder: (BuildContext context, int index) {
+    //                                               final data = storedActivityData[index];
+    //                                               return ListTile(
+    //                                                 title: Text("CategoryName: ${data['CategoryName']}"),
+    //                                                 subtitle: Column(
+    //                                                   crossAxisAlignment: CrossAxisAlignment.start,
+    //                                                   children: [
+    //                                                     Text("AssetName: ${data['AssetName']}"),
+    //                                                     Text("ActivityName: ${data['ActivityName']}"),
+    //                                                   ],
+    //                                                 ),
+    //                                               );
+    //                                             },
+    //                                           ),
+    //                                         ),
+    //                                         actions: [
+    //                                           TextButton(
+    //                                             onPressed: () => Navigator.of(context).pop(),
+    //                                             child: const Text("Close"),
+    //                                           ),
+    //                                         ],
+    //                                       );
+    //                                     },
+    //                                   );
+    //                                 },
+    //                                 child: const Text("Display Activity Stored"),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),),
+    //                       ),
+    //                     ),
+    //                     const SizedBox(
+    //                       height: 10,
+    //                     ),
+    //                   ],
+    //                 ),
+    //
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       )
+    //     ]),
+    //   ),
+    // );
 
-                ),
-              ),
-            ),
-          ),
-
-        Card(
-          color: AppColors.purpleLight,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: 3,
-          child: AspectRatio(
-            aspectRatio: 1.23,
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 37,
-                    ),
-                    const Text(
-                      'Generate Pdf Report',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 37,
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 16, left: 6),
-                        child: ElevatedButton(onPressed: (){generatePdf(context);},child: Text("Click here Generate Pdf"),),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                  ],
-                ),
-
-              ],
-            ),
-          ),
-        ),
-
-
-
-          Padding(
-            padding: const EdgeInsets.only(
-                left: AppPadding.P10 / 2,
-                top: AppPadding.P10 / 2,
-                right: AppPadding.P10 / 2,
-                bottom: AppPadding.P10),
-            child:
-            Card(
-              color: AppColors.purpleLight,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              elevation: 3,
-              child: AspectRatio(
-                aspectRatio: 1.23,
-                child: Stack(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 37,
-                        ),
-                        const Text(
-                          'Generate Excel Report',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 37,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 16, left: 6),
-                            child: ElevatedButton(onPressed: (){generateExcelFromXAMPP();},child: Text("click here to Generate Excel"),),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(
-                left: AppPadding.P10 / 2,
-                top: AppPadding.P10 / 2,
-                right: AppPadding.P10 / 2,
-                bottom: AppPadding.P10),
-            child:
-            Card(
-              // color: AppColors.purpleLight,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              elevation: 3,
-              child: AspectRatio(
-                aspectRatio: 1.23,
-                child: Stack(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 37,
-                        ),
-                        const Text(
-                          'Upload to Phone',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 37,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 16, left: 6),
-                            child: ElevatedButton(onPressed: (){
-                              fetchDataStoreInDatabase();
-                            },child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-
-                                  ElevatedButton(
-                                    onPressed: fetchDataStoreInDatabase,
-                                    child: const Text("Upload Data to phone"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      final storedData = await fetchStoredLoginsDataFromDatabase();
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Stored Logins"),
-                                            content: SizedBox(
-                                              height: 200,
-                                              child: ListView.builder(
-                                                itemCount: storedData.length,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final data = storedData[index];
-                                                  return ListTile(
-                                                    title: Text("UserName: ${data['username']}"),
-                                                    subtitle: Column(
-                                                      children: [
-                                                        Text("Password : ${data['password']}"),
-                                                        Text("role : ${data['role']}"),
-                                                      ],
-                                                    )
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.of(context).pop(),
-                                                child: const Text("Close"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: const Text("Display Stored Logins"),
-                                  ),
-
-
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      final storedWorkerData = await fetchStoredWorkersFromDatabase();
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Stored Worker Data"),
-                                            content: SizedBox(
-                                              height: 200,
-                                              child: ListView.builder(
-                                                itemCount: storedWorkerData.length,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final data = storedWorkerData[index];
-                                                  return ListTile(
-                                                    title: Text("WorkerName: ${data['workerName']}"),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.of(context).pop(),
-                                                child: const Text("Close"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: const Text("Display Workers Stored"),
-                                  ),
-
-
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      final storedActivityData = await fetchStoredDataFromDatabase();
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Stored Data Activity"),
-                                            content: SizedBox(
-                                              height: 200,
-                                              child: ListView.builder(
-                                                itemCount: storedActivityData.length,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final data = storedActivityData[index];
-                                                  return ListTile(
-                                                    title: Text("CategoryName: ${data['CategoryName']}"),
-                                                    subtitle: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text("AssetName: ${data['AssetName']}"),
-                                                        Text("ActivityName: ${data['ActivityName']}"),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.of(context).pop(),
-                                                child: const Text("Close"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: const Text("Display Activity Stored"),
-                                  ),
-                                ],
-                              ),
-                            ),),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-
-                  ],
-                ),
-              ),
-            ),
-          )
-        ]),
-      ),
-    );
+return Scaffold();
   }
 }

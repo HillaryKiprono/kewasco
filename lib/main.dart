@@ -19,10 +19,12 @@ class MainApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.black
       ),
       // home:  UploadDataToSqflite(),
-      home:  SplashScreen(),
+      home:  AdminDashboard(username: 'Hillary',),
      // home: AdminDashboard(username: "Hillary"),
      //  home: const LeaveFormApplication(
 
     );
   }
 }
+
+

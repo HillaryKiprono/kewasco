@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'Technical Department/admin/admin_dashboard.dart';
-import 'Technical Department/api_endpoints/api_connections.dart';
+import 'Technical Department/api_endpoints/api_connections2.dart';
 import 'Technical Department/dbHelperClass/databaseHelper.dart';
 import 'Technical Department/user/userDashboard.dart';
 import 'config.dart';

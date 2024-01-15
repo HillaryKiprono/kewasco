@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../../api_endpoints/api_connections.dart';
+import '../../api_endpoints/api_connections2.dart';
 import '../resource/app_colors.dart';
 
 class AddSupervisor extends StatefulWidget {

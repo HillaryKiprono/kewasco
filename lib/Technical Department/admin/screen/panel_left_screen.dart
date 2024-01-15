@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kewasco/Technical%20Department/admin/widget/addActivity.dart';
-import 'package:kewasco/Technical%20Department/admin/widget/addCategory.dart';
-
+import 'package:kewasco/Technical%20Department/admin/widget/addTeamLeader.dart';
+import 'package:kewasco/Technical%20Department/admin/widget/add_task.dart';
+import 'package:kewasco/Technical%20Department/admin/widget/assignAreaLocation.dart';
 import '../resource/app_colors.dart';
 import '../resource/app_padding.dart';
-import '../widget/charts.dart';
-import '../widget/addAsset.dart';
+import '../widget/add_worker.dart';
 import '../widget/responsive_layout.dart';
 
 class Todo {
@@ -53,7 +53,7 @@ class _PanelLeftScreenState extends State<PanelLeftScreen> {
                       top: AppPadding.P10 / 2,
                       right: AppPadding.P10 / 2),
                   child: Card(
-                      color: AppColors.purpleLight,
+                      color: Colors.blue.withOpacity(.7),
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
@@ -61,27 +61,25 @@ class _PanelLeftScreenState extends State<PanelLeftScreen> {
                       child: Container(
                         width: double.infinity,
                         child: const ListTile(
-                          title: Text(
-                            "Adding Task",
-                            style: TextStyle(color: Colors.white),
+                          title: Center(
+                            child: Text(
+                              "Registration Panel",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           // subtitle: Text(
                           //   "",
                           //   style: TextStyle(color: Colors.white),
                           // ),
-                          trailing: Chip(
-                            label: Text(
-                              "20,500",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
+
                         ),
                       )),
                 ),
-                const AddCategory(),
-                const AddAssets(),
-                const AddActivity(),
-                Padding(
+                const AddTask(),
+                const AddWorker(),
+                 AddNewTeamLeader(),
+                const AssignAreaLocation(),
+                  Padding(
                     padding: const EdgeInsets.only(
                         left: AppPadding.P10 / 2,
                         top: AppPadding.P10 / 2,

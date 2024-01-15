@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../config.dart';
-import '../../api_endpoints/api_connections.dart';
+import '../../api_endpoints/api_connections2.dart';
 import '../resource/app_colors.dart';
 import '../resource/app_padding.dart';
 
