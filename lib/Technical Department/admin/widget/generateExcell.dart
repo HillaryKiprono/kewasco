@@ -116,16 +116,31 @@ class ExcelGenerator {
 
   ExcelGenerator(this.data);
 
-  Future<void> generateExcelDocument() async {
+  Future<void> generateExcelDocument() async  {
     // Create Excel workbook and sheet
     final excel = Excel.createExcel();
     final sheet = excel['Sheet1'];
 
     // Add headers to the sheet
-    var headers = ['accountNo', 'dateStarted', 'timeStarted', 'department', 'section', 'selectedTaskName',
-      'workLocation', 'northings', 'eastings', 'workStatus', 'dateCompleted', 'timeCompleted', 'workDescription', 'material',
-      'assignedWorker','Supervisor'
+    var headers = [
+      'AccountNo',
+      'DateStarted',
+      'TimeStarted',
+      'Department',
+      'Section',
+      'SelectedTaskName',
+      'WorkLocation',
+      'Northings',
+      'Eastings',
+      'WorkStatus',
+      'DateCompleted',
+      'TimeCompleted',
+      'WorkDescription',
+      'Material',
+      'AssignedWorker',
+      'Supervisor',
     ];
+
     for (var col = 0; col < headers.length; col++) {
       sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0)).value = headers[col];
     }
