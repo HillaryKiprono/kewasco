@@ -1,42 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get_navigation/src/root/get_material_app.dart';
-// import 'package:kewasco/splashscreen.dart';
-// import 'package:kewasco/views/loginDesktop.dart';
-//
-// import 'Technical Department/admin/admin_dashboard.dart';
-// void main() {
-//   runApp(const MainApp());
-// }
-//
-// class MainApp extends StatelessWidget {
-//   const MainApp({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetMaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       // theme: ThemeData(primarySwatch: Colors.teal),
-//       theme: ThemeData().copyWith(
-//         brightness: Brightness.dark,
-//             scaffoldBackgroundColor: Colors.black
-//       ),
-//       // home:  UploadDataToSqflite(),
-//       home: LoginDesktop()
-//      // home: AdminDashboard(username: "Hillary"),
-//      //  home: const LeaveFormApplication(
-//
-//     );
-//   }
-// }
-//
-//
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:kewasco/user/models/dbHelper.dart';
 import 'package:kewasco/views/loginDesktop.dart';
+import 'package:kewasco/views/login_view.dart';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -46,7 +14,6 @@ import 'dart:io' as io;
 import 'Technical Department/api_endpoints/api_connections.dart';
 
 void main() {
-  runApp(MyApp());
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   runApp(MyApp());
@@ -120,6 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 await dbHelper.insertTask(row1);
                 final List<Map<String, dynamic>> storedTask =
                 await dbHelper.queryAllTask();
+                print(
+                    "***************************** storedTask $storedTask");
               }
             }
           } else {
@@ -163,6 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 await dbHelper.insertWorker(row1);
                 final List<Map<String, dynamic>> storedWorker =
                 await dbHelper.queryAllWorkers();
+                print(
+                    "***************************** storedWorker $storedWorker");
               }
             }
           } else {
@@ -232,9 +203,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // checkOperating();
-    // checkDataInDatabase();
+    Future.delayed(Duration.zero, () {
+      checkOperating();
+      checkDataInDatabase();
+    });
   }
+
 
   Future<bool> tableExists(Database database, String tableName) async {
     var result = await database.rawQuery(
@@ -296,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: (io.Platform.isAndroid)
             ? buildAndroidBody(context)
-            : LoginDesktop(),
+            : LoginView(),
       ),
     );
   }
@@ -308,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Navigate to the login view
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginDesktop()),
+          MaterialPageRoute(builder: (context) => LoginView()),
         );
       },
       child: const Text('Get Started'),
@@ -354,28 +328,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-// Widget buildAndroidBody(BuildContext context) {
-//   return hasData
-//       ? ElevatedButton(
-//     onPressed: () {
-//       // Navigate to the login view
-//       Navigator.push(
-//         context ,
-//         MaterialPageRoute(builder: (context) => LoginDesktop()),
-//       );
-//     },
-//     child: const Text('Get Started'),
-//   )
-//       : ElevatedButton(
-//     onPressed: () {
-//       fetchTaskFromServer();
-//       fetchWorkersFromServer();
-//       fetchTeamLeadersFromServer();
-//       setState(() {
-//         hasData = true;
-//       });
-//     },
-//     child: const Text('Download Data'),
-//   );
-// }
+
 }

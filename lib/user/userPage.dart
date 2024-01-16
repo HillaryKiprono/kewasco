@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:flutter/material.dart';
@@ -27,7 +28,10 @@ class NRWPage extends StatefulWidget {
 
 class _NRWPageState extends State<NRWPage> {
   final dbHelper = DatabaseHelper();
-  final SimpleUIController simpleUIController = Get.find<SimpleUIController>();
+  // final SimpleUIController simpleUIController = Get.find<SimpleUIController>();
+  SimpleUIController simpleUIController = Get.put(SimpleUIController());
+
+
   TextEditingController latitudeController = TextEditingController();
   TextEditingController longitudeController = TextEditingController();
   TextEditingController departmentController = TextEditingController(text: "Technical Department");
@@ -82,7 +86,9 @@ class _NRWPageState extends State<NRWPage> {
       setState(() {
         selectedStartDate = picked;
         formattedStartDate = DateFormat('yyyy-MM-dd').format(selectedStartDate);
-        print("Formatted Start Date: $formattedStartDate");
+        if (kDebugMode) {
+          print("Formatted Start Date: $formattedStartDate");
+        }
       });
     }
   }
@@ -490,7 +496,17 @@ class _NRWPageState extends State<NRWPage> {
                       // SingleTextField(
                       //   title: "Job Card No",
                       // ),
-                      Center(child: Text('Welcome, ${simpleUIController.authenticatedUsername}',style: TextStyle(fontWeight: FontWeight.w900,fontSize: 16),)),
+                      Center(
+                        child: GetBuilder<SimpleUIController>(
+                          builder: (controller) {
+                            return Text(
+                              'Welcome, ${controller.authenticatedUsername}',
+                              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                            );
+                          },
+                        ),
+                      ),
+
                       const SizedBox(
                         height: 8,
                       ),

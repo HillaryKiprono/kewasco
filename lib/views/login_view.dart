@@ -78,9 +78,13 @@ class _LoginViewState extends State<LoginView> {
       } else {
         print('Invalid credentials. Authentication failed.');
       }
+
+      // Store the authenticated username in SimpleUIController
+      simpleUIController.setAuthenticatedUsername(username);
     } catch (e) {
       print('Error during authentication: $e');
     }
+
   }
 
 
