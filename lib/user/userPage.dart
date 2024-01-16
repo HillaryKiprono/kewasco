@@ -503,13 +503,13 @@ class _NRWPageState extends State<NRWPage> {
                           builder: (controller) {
                             return Row(
                               children: [
-                                ElevatedButton(onPressed: () {
-                              // Navigate to the stored data screen
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => StoredDataScreen()),
-                              );
-                            }, child: Text("View ")),
+                            //     ElevatedButton(onPressed: () {
+                            //   // Navigate to the stored data screen
+                             //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(builder: (context) => StoredDataScreen()),
+                            //   );
+                            // }, child: Text("View ")),
                                 Text(
                                   'Welcome, ${controller.authenticatedUsername}',
                                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),

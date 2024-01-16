@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:kewasco/user/models/dbHelper.dart';
 import 'package:kewasco/views/loginDesktop.dart';
@@ -35,6 +37,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Future<void> checkOperating() async {
+  //   if (io.Platform.isAndroid) {
+  //     checkDataInDatabase();
+  //     print('Operating System: Android');
+  //   } else if (io.Platform.isIOS) {
+  //     // Code to execute if the operating system is iOS
+  //     print('Operating System: iOS');
+  //   } else if (io.Platform.isWindows) {
+  //     LoginDesktop();
+  //     // Code to execute if the operating system is Windows
+  //     print('Operating System: Windows');
+  //   } else if (io.Platform.isLinux) {
+  //     LoginDesktop();
+  //     // Code to execute if the operating system is Linux
+  //     print('Operating System: Linux');
+  //   } else if (io.Platform.isMacOS) {
+  //     // Code to execute if the operating system is macOS
+  //     print('Operating System: macOS');
+  //   } else {
+  //     // Code to execute for other or unknown operating systems
+  //     print('Operating System: Unknown');
+  //   }
+  // }
+
   Future<void> checkOperating() async {
     if (io.Platform.isAndroid) {
       checkDataInDatabase();
@@ -42,14 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (io.Platform.isIOS) {
       // Code to execute if the operating system is iOS
       print('Operating System: iOS');
-    } else if (io.Platform.isWindows) {
-      LoginDesktop();
-      // Code to execute if the operating system is Windows
-      print('Operating System: Windows');
-    } else if (io.Platform.isLinux) {
-      LoginDesktop();
-      // Code to execute if the operating system is Linux
-      print('Operating System: Linux');
+    } else if (io.Platform.isWindows || io.Platform.isLinux) {
+      // Navigate to LoginDesktop
+      Get.to((LoginDesktop()));
+
     } else if (io.Platform.isMacOS) {
       // Code to execute if the operating system is macOS
       print('Operating System: macOS');
@@ -205,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     Future.delayed(Duration.zero, () {
       checkOperating();
-      checkDataInDatabase();
+      // checkDataInDatabase();
     });
   }
 
