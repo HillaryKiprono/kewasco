@@ -96,10 +96,23 @@ class DatabaseHelper {
     }
   }
 
+  // Future<int> insertTask(Map<String, dynamic> row) async {
+  //   Database db = await database;
+  //   return await db.insert(_tblTask, row);
+  // }
+
   Future<int> insertTask(Map<String, dynamic> row) async {
     Database db = await database;
-    return await db.insert(_tblTask, row);
+    try {
+      int result = await db.insert(_tblTask, row);
+      print('Inserted into $_tblTask: $row');
+      return result;
+    } catch (e) {
+      print('Error inserting task: $e');
+      return -1; // or throw an exception
+    }
   }
+
 
   Future<int> insertTeamLeader(Map<String, dynamic> row) async {
     Database db = await database;
@@ -132,9 +145,15 @@ class DatabaseHelper {
     return await db.query(_tblWorker);
   }
 
+  // Future<List<Map<String, dynamic>>> queryAllTask() async {
+  //   Database db = await database;
+  //   return await db.query(_tblTask);
+  // }
   Future<List<Map<String, dynamic>>> queryAllTask() async {
     Database db = await database;
-    return await db.query(_tblTask);
+    List<Map<String, dynamic>> result = await db.query(_tblTask);
+    print('Task Table Data: $result');
+    return result;
   }
 
   Future<List<Map<String, dynamic>>> queryAllJobCard() async {

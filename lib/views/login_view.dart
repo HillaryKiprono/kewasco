@@ -27,33 +27,6 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
-
-  // Future<void> authenticateUser() async {
-  //   final String username = nameController.text;
-  //   final String password = passwordController.text;
-  //
-  //   try {
-  //     bool isAuthenticated = await dbHelper.authenticateUser(username, password);
-  //
-  //     if (isAuthenticated) {
-  //       // Store the authenticated username in a variable
-  //       simpleUIController.setAuthenticatedUsername(username);
-  //
-  //       // Navigate to home page or perform any desired action
-  //       print('User authenticated successfully!');
-  //       Get.to(NRWPage());
-  //     } else {
-  //       // Show an error message or handle invalid credentials
-  //       print('Invalid credentials. Authentication failed.');
-  //     }
-  //   } catch (e) {
-  //     // Handle any potential errors during authentication
-  //     print('Error during authentication: $e');
-  //   }
-  // }
-
-
   Future<void> authenticateUser() async {
     final String username = nameController.text;
     final String password = passwordController.text;
@@ -86,9 +59,6 @@ class _LoginViewState extends State<LoginView> {
     }
 
   }
-
-
-
 
   @override
   void dispose() {

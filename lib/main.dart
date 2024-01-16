@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
             responseData1.containsKey('data')) {
           final dynamic data1 = responseData1['data'];
 
-          await dbHelper.clearTables();
+          // await dbHelper.clearTables();
 
           if (data1 is List) {
             for (var item1 in data1) {
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final dynamic data2 = responseData2['data'];
           print("Worker data *********************$data2****************");
 
-          await dbHelper.clearTables();
+          // await dbHelper.clearTables();
 
           if (data2 is List) {
             for (var item2 in data2) {
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
             responseData2.containsKey('data')) {
           final dynamic data2 = responseData2['data'];
 
-          await dbHelper.clearTables();
+          // await dbHelper.clearTables();
 
           if (data2 is List) {
             for (var item2 in data2) {

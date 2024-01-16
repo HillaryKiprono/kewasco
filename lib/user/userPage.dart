@@ -5,16 +5,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:kewasco/user/storeditems.dart';
 import 'package:kewasco/user/viewJobCardFieldData.dart';
-
 import '../Technical Department/api_endpoints/api_connections.dart';
 import '../controller/simple_ui_controller.dart';
-import '../views/customAppBar.dart';
 import 'components/singleTextArea.dart';
 import 'components/singleTextField.dart';
 import 'models/dbHelper.dart';
@@ -202,6 +199,8 @@ class _NRWPageState extends State<NRWPage> {
       print(e.toString());
     }
   }
+
+
   Future<void> fetchWorkersFromServer() async {
     try {
       final response2 = await http.get(Uri.parse(API.fetchAllWorkers));
@@ -289,6 +288,7 @@ class _NRWPageState extends State<NRWPage> {
     final List<Map<String, dynamic>> storedTask = await dbHelper.queryAllTask();
 
      _insertedTaskNames=storedTask;
+     print(_insertedTaskNames[0]);
 
     return storedTask;
   }
@@ -348,6 +348,7 @@ class _NRWPageState extends State<NRWPage> {
 
     setState(() {
       task = fetchTask;
+      print(task);
     });
   }
   Future<void> fetchWorkers() async {
@@ -371,6 +372,7 @@ class _NRWPageState extends State<NRWPage> {
     fetchWorkers();
     fetchStoredTaskFromDatabase();
     fetchStoredTaskFromDatabase();
+
     // Format initial dates and times
     formattedStartDate = DateFormat('yyyy-MM-dd').format(selectedStartDate);
     formattedStartedTime =
@@ -499,9 +501,20 @@ class _NRWPageState extends State<NRWPage> {
                       Center(
                         child: GetBuilder<SimpleUIController>(
                           builder: (controller) {
-                            return Text(
-                              'Welcome, ${controller.authenticatedUsername}',
-                              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                            return Row(
+                              children: [
+                                ElevatedButton(onPressed: () {
+                              // Navigate to the stored data screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => StoredDataScreen()),
+                              );
+                            }, child: Text("View ")),
+                                Text(
+                                  'Welcome, ${controller.authenticatedUsername}',
+                                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -510,6 +523,7 @@ class _NRWPageState extends State<NRWPage> {
                       const SizedBox(
                         height: 8,
                       ),
+                      
                       SingleTextField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -632,7 +646,6 @@ class _NRWPageState extends State<NRWPage> {
                 height: 8,
               ),
               const Text("Select Task"),
-
 
               Padding(
                 padding: const EdgeInsets.all(10),
