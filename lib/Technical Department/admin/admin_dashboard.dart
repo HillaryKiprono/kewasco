@@ -27,6 +27,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+
         appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 100),
           child: (ResponsiveLayout.isTinyLimit(context) ||

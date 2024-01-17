@@ -27,6 +27,8 @@ class _PanelLeftScreenState extends State<PanelLeftScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.purpleDark,
+
       body: Stack(
         children: [
 

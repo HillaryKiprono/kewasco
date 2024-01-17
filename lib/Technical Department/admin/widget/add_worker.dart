@@ -25,36 +25,113 @@ class AddWorkerState extends State {
   TextEditingController workerNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  // Future<void> saveWorker(BuildContext context) async {
+  //   FetchWorkerModel workerModel = FetchWorkerModel(
+  //     workerNameController.text.trim(),);
+  //   try {
+  //     var response = await http.post(
+  //         Uri.parse(API.submitWorker),
+  //         body: workerModel.tojson()
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       var submitResponseBody = jsonDecode(response.body);
+  //       if (submitResponseBody['success'] == true) {
+  //         workerNameController.clear();
+  //         // buttonClickMsg(context,QuickAlertType.success);
+  //
+  //       }
+  //       else
+  //         {
+  //           // buttonClickMsg(context, QuickAlertType.error);
+  //
+  //         }
+  //     }
+  //   }
+  //   catch (e) {
+  //     // buttonClickMsg(context, QuickAlertType.error);
+  //     print(e.toString());
+  //   }
+  // }
+
   Future<void> saveWorker(BuildContext context) async {
     FetchWorkerModel workerModel = FetchWorkerModel(
-      workerNameController.text.trim(),);
+      workerNameController.text.trim(),
+    );
     try {
-      var response = await http.post(
-          Uri.parse(API.submitWorker),
-          body: workerModel.tojson()
+      var res = await http.post(
+        Uri.parse(API.submitWorker),
+        body: workerModel.toJson(),
       );
 
-      if (response.statusCode == 200) {
-        var submitResponseBody = jsonDecode(response.body);
-        if (submitResponseBody['success'] == true) {
+      if (res.statusCode == 200) {
+        var resBody = jsonDecode(res.body);
+
+        if (resBody['success'] == true) {
+          // Show success message
+          print("Worker added successfully");
+          showSuccessDialog(context);
+
+          // Reset text controllers to clear the entered data
           workerNameController.clear();
-          buttonClickMsg(context,QuickAlertType.success);
-          if (kDebugMode) {
-            print("Submitted successfully");
-          }
-          else {
-            buttonClickMsg(context, QuickAlertType.error);
-            if (kDebugMode) {
-              print("Failed to submit data");
-            }
-          }
+        } else {
+          // Show failure message
+          print("Failed to add worker: ${resBody['message']}");
+          showFailureDialog(context);
         }
+      } else {
+        // Show failure message for non-200 status codes
+        print("Failed to connect. Status Code: ${res.statusCode}");
+        showFailureDialog(context);
       }
-    }
-    catch (e) {
-      buttonClickMsg(context, QuickAlertType.error);
+    } catch (e) {
+      // Show failure message for exceptions
+      print("Check your connection");
       print(e.toString());
+      showFailureDialog(context);
     }
+  }
+  // Show dialog for successful insertion of activity
+  void showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text('Operation completed successfully.'),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Show dialog for failure insertion message
+  void showFailureDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Failed to save Activity'),
+          content: const Text(
+              'Operation #### completion failed. Please check your internet or inputs.'),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void buttonClickMsg(BuildContext context, QuickAlertType quickAlertType) {
@@ -62,22 +139,6 @@ class AddWorkerState extends State {
       context: context,
       type: quickAlertType,
 
-    );
-  }
-  void showSuccessDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Success"),
-          content: const Text("New Worker Added successfully"),
-          actions: [
-            ElevatedButton(onPressed: () {
-              Navigator.of(context).pop();
-            }, child: const Text('ok'))
-          ],
-        );
-      },
     );
   }
 
@@ -114,53 +175,85 @@ class AddWorkerState extends State {
                           color: Colors.white
                           ,
                           borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Text(
-                            "ADD NEW WORKER",
-                            style: TextStyle(color: Colors.black),
-                          ),
+                      child: Form(
+                        key: _formKey  ,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text(
+                              "ADD NEW WORKER",
+                              style: TextStyle(color: Colors.black),
+                            ),
 
-                          TextFormField(
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
 
-                            controller: workerNameController,
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                              // fillColor: Colors.white,
-                              //  filled: true,
-                                labelText: "Enter Worker Name",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                )),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please enter Worker Name";
-                              }
-                            },
-                          ),
-                          RawMaterialButton(
-                              fillColor: Colors.blue,
-                              splashColor: Colors.blueAccent,
-                              shape: StadiumBorder(),
-                              onPressed: () {
-                                saveWorker(context);
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8,
-                                    horizontal: 20
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.save_rounded,color: Colors.white,),
-                                    SizedBox(width: 8,),
-                                    Text("Submit Worker",style: TextStyle(color: Colors.white),),
-                                  ],
-                                ),
-                              ))
-                        ],
+                                controller: workerNameController,
+                                style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                  // fillColor: Colors.white,
+                                  //  filled: true,
+                                    labelText: "Enter Worker Name",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    )),
+                                validator: (value) {
+                                  if (value==null || value.isEmpty) {
+                                    return "Please enter WorkerName";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            RawMaterialButton(
+                                fillColor: Colors.blue,
+                                splashColor: Colors.blueAccent,
+                                shape: StadiumBorder(),
+                                onPressed: () {
+                                  if (workerNameController.text.trim().isNotEmpty) {
+                                    // Task name is not empty, proceed to save
+                                    saveWorker(context);
+                                  }
+                                  else {
+                                    // Show an error message or handle the case when the task name is empty
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Error'),
+                                          content: const Text('Please enter Worker Name before submitting.'),
+                                          actions: <Widget>[
+                                            ElevatedButton(
+                                              child: const Text('OK'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+
+                                  saveWorker(context);
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8,
+                                      horizontal: 20
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.save_rounded,color: Colors.white,),
+                                      SizedBox(width: 8,),
+                                      Text("Submit Worker",style: TextStyle(color: Colors.white),),
+                                    ],
+                                  ),
+                                ))
+                          ],
+                        ),
                       ),
                     ),
               ),)

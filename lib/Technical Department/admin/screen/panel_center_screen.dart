@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kewasco/Technical%20Department/admin/widget/viewAllAreaLocation.dart';
 import 'package:kewasco/Technical%20Department/admin/widget/viewAllTeamLeaders.dart';
 import 'package:kewasco/Technical%20Department/admin/widget/viewAllWorkers.dart';
 import 'package:kewasco/Technical%20Department/admin/widget/viewAssignAreaLocation.dart';
@@ -16,18 +17,19 @@ class PanelCenterScreen extends StatefulWidget {
 }
 
 class _PanelCenterScreenState extends State<PanelCenterScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.purpleDark,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                  left: AppPadding.P10 / 2,
-                  top: AppPadding.P10 / 2,
-                  right: AppPadding.P10 / 2),
+                  // left: AppPadding.P10 / 2,
+                  // top: AppPadding.P10 / 2,
+                  // right: AppPadding.P10 / 2
+                  ),
               child: Card(
                   color: Colors.blue.withOpacity(.7),
                   elevation: 3,
@@ -43,18 +45,16 @@ class _PanelCenterScreenState extends State<PanelCenterScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      // subtitle: Text(
-                      //   "82% of Products Avail.",
-                      //   style: TextStyle(color: Colors.white),
-                      // ),
+
                     ),
                   )),
             ),
 
-            ViewAllTask(),
-             ViewAllWorkers(),
-            ViewAllTeamLeaders(),
-            ViewAllAssignAreaLocation()
+            const ViewAllTask(),
+            const ViewAllWorkers(),
+            const ViewAllTeamLeaders(),
+            ViewAllAreaLocation(),
+            const ViewAllAssignAreaLocation()
             // AddSupervisor(),
           ],
         ),

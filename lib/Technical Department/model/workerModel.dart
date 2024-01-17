@@ -7,7 +7,7 @@ class FetchWorkerModel{
 
   factory FetchWorkerModel.fromJson(Map<String,dynamic> json)=>
   FetchWorkerModel(json['workerName']);
-  Map<String,dynamic> tojson()=>{
+  Map<String,dynamic> toJson()=>{
     'workerName':workerName
   };
 }

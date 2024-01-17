@@ -178,7 +178,7 @@ class _AssignAreaLocationState extends State<AssignAreaLocation> {
           top: AppPadding.P10,
           bottom: AppPadding.P10),
       child: Card(
-        color: AppColors.purpleLight,
+        // color: AppColors.purpleLight,
         elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -208,51 +208,55 @@ class _AssignAreaLocationState extends State<AssignAreaLocation> {
                           style: TextStyle(color: Colors.black),
                         ),
 
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                              )
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField(
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                )
+                            ),
+                            value: selectedTeamLeaderName,
+                            hint: const Text('Select Team Leader'),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedTeamLeaderName = newValue;
+                              });
+                            },
+                            items: teamLeadersList.map((String teamLeader) {
+                              return DropdownMenuItem<String>(
+                                value: teamLeader,
+                                child: Text(teamLeader),
+                              );
+                            }).toList(),
                           ),
-                          value: selectedTeamLeaderName,
-                          hint: const Text('Select Team Leader'),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedTeamLeaderName = newValue;
-                            });
-                          },
-                          items: teamLeadersList.map((String teamLeader) {
-                            return DropdownMenuItem<String>(
-                              value: teamLeader,
-                              child: Text(teamLeader),
-                            );
-                          }).toList(),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField(
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                )
+                            ),
+                            value: selectedAreaLocationName,
+                            hint: const Text('Select Area Location'),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedAreaLocationName = newValue;
+                              });
+                            },
+                            items: areaLocationList.map((String areaLocation) {
+                              return DropdownMenuItem<String>(
+                                value: areaLocation,
+                                child: Text(areaLocation),
+                              );
+                            }).toList(),
+                          ),
                         ),
                         const SizedBox(
-                          height: 20,
-                        ),
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                              )
-                          ),
-                          value: selectedAreaLocationName,
-                          hint: const Text('Select Area Location'),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedAreaLocationName = newValue;
-                            });
-                          },
-                          items: areaLocationList.map((String areaLocation) {
-                            return DropdownMenuItem<String>(
-                              value: areaLocation,
-                              child: Text(areaLocation),
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(
-                          height: 30,
+                          height: 10,
                         ),
                         RawMaterialButton(
                           onPressed: () {

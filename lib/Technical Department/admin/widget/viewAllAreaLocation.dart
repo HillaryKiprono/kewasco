@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import '../../../config.dart';
 import '../../api_endpoints/api_connections.dart';
 import '../../model/fetchAreaLocationModel.dart';
+import '../resource/app_colors.dart';
+import '../resource/app_padding.dart';
 import 'edit_area_location.dart';
 
 class ViewAllAreaLocation extends StatefulWidget {
@@ -160,6 +162,175 @@ class _ViewAllAreaLocationState extends State<ViewAllAreaLocation> {
   Widget build(BuildContext context) {
     List<FetchAreaLocationModel> paginatedData = getPaginatedData();
 
+
+    return Container(
+      height: 400,
+      width: double.infinity,
+      padding: const EdgeInsets.only(
+          left: AppPadding.P10 / 2,
+          right: AppPadding.P10 / 2,
+          top: AppPadding.P10,
+          bottom: AppPadding.P10
+      ),
+      child: Card(
+        color: AppColors.purpleLight,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: AspectRatio(
+          aspectRatio: 1.5,
+          child: Row(
+            children: <Widget>[
+              const SizedBox(
+                height: 18,
+              ),
+              Expanded(
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white
+                        ,
+                        borderRadius: BorderRadius.circular(20)),
+                    child:
+
+
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 6.0),
+                        FractionallySizedBox(
+                          widthFactor: 0.9,
+                          child: DataTable(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                            ),
+                            columns: const [
+                              // DataColumn(
+                              //   label: Text('ID'),
+                              // ),
+                              DataColumn(
+                                label: Text('Code'),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  "Location",
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text('Action'),
+                              ),
+                            ],
+                            rows: List.generate(
+                              paginatedData.length,
+                                  (index) => DataRow(
+                                cells: [
+                                  // DataCell(
+                                  //   Text(
+                                  //     paginatedData[index].id?.toString() ?? 'N/A',
+                                  //     style: const TextStyle(color: Colors.blue),
+                                  //   ),
+                                  // ),
+                                  DataCell(
+                                    Text(paginatedData[index].areaLocationCode),
+                                  ),
+                                  DataCell(
+                                    Text(paginatedData[index].areaLocationName),
+                                  ),
+                                  DataCell(
+                                    Row(
+
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        IconButton(onPressed: () => confirmDeleteTask(
+                                            context,
+                                            paginatedData[index].id?.toString() ??
+                                                'N/A'),
+                                            icon: Icon(Icons.delete_forever,color: Colors.red,)),
+
+                                        IconButton(
+                                            onPressed: () {
+                                              confirmEditTask(
+                                                  context,
+                                                  paginatedData[index].id ?? 0,
+                                                  paginatedData[index].areaLocationCode,
+                                                  paginatedData[index].areaLocationName
+                                              );
+                                              fetchDataFromDatabase();
+                                            },
+                                            icon: Icon(Icons.edit,color: Colors.blue,)),
+                                        // ElevatedButton(
+                                        //   onPressed: () => confirmDeleteTask(
+                                        //       context,
+                                        //       paginatedData[index].id?.toString() ??
+                                        //           'N/A'),
+                                        //   style: ElevatedButton.styleFrom(
+                                        //     backgroundColor: Colors.red,
+                                        //   ),
+                                        //   child: const Text('Delete'),
+                                        // ),
+                                        // ElevatedButton(
+                                        //   onPressed: () {
+                                        //     confirmEditTask(
+                                        //       context,
+                                        //       paginatedData[index].id ?? 0,
+                                        //       paginatedData[index].areaLocationCode,
+                                        //       paginatedData[index].areaLocationName
+                                        //     );
+                                        //     fetchDataFromDatabase();
+                                        //   },
+                                        //   child: const Text('Edit'),
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        // Pagination
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () {
+                                setState(() {
+                                  currentPage = currentPage > 1 ? currentPage - 1 : 1;
+                                });
+                              },
+                            ),
+                            Text(currentPage.toString(), style: TextStyle(fontSize: 18.0)),
+                            IconButton(
+                              icon: const Icon(Icons.arrow_forward),
+                              onPressed: () {
+                                setState(() {
+                                  int totalPage = (workerData.length / itemsPerPage).ceil();
+                                  currentPage =
+                                  currentPage < totalPage ? currentPage + 1 : totalPage;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+
+
+                  ),
+                ),)
+            ],
+          ),
+        ),
+      ),
+    );
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.withOpacity(0.9),
@@ -170,7 +341,8 @@ class _ViewAllAreaLocationState extends State<ViewAllAreaLocation> {
       body: Container(
         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
         // padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child:
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 6.0),

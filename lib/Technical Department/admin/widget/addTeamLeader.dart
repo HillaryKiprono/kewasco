@@ -99,7 +99,7 @@ class _AddNewTeamLeaderState extends State<AddNewTeamLeader> {
           top: AppPadding.P10,
           bottom: AppPadding.P10),
       child: Card(
-        color: AppColors.purpleLight,
+        // color: AppColors.purpleLight,
         elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -117,8 +117,7 @@ class _AddNewTeamLeaderState extends State<AddNewTeamLeader> {
                   child:
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.white
-                        ,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -129,25 +128,30 @@ class _AddNewTeamLeaderState extends State<AddNewTeamLeader> {
                         ),
 
 
-                        TextFormField(
-                          controller: teamLeaderNameController,
-                          cursorColor: Colors.greenAccent,
-                          maxLines: 2,
-                          decoration: InputDecoration(
-                              labelText: "Enter Team Leader Name",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: teamLeaderNameController,
+                            cursorColor: Colors.greenAccent,
+                            maxLines: 2,
+                            decoration: InputDecoration(
+                                labelText: "Enter Team Leader Name",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                          ),
                         ),
 
-                        SizedBox(height: 0,),
-                        TextFormField(
-                          obscureText: true,
-                          controller: teamLeaderPasswordController,
-                          cursorColor: Colors.greenAccent,
-                          decoration: InputDecoration(
-                              labelText: "Enter Team Leader Password",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            obscureText: true,
+                            controller: teamLeaderPasswordController,
+                            cursorColor: Colors.greenAccent,
+                            decoration: InputDecoration(
+                                labelText: "Enter Team Leader Password",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                          ),
                         ),
                         RawMaterialButton(
                             fillColor: Colors.blue,

@@ -16,6 +16,7 @@ class AddTask extends StatefulWidget {
 }
 
 class AddTaskState extends State {
+  final _formKey=GlobalKey<FormState>();
   int touchedIndex = -1;
 
   TextEditingController taskNameController = TextEditingController();
@@ -112,7 +113,7 @@ class AddTaskState extends State {
           top: AppPadding.P10,
           bottom: AppPadding.P10),
       child: Card(
-        color: AppColors.purpleLight,
+        // color: AppColors.purpleLight,
         elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -130,56 +131,87 @@ class AddTaskState extends State {
                   child:
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white
-,
+                      color: Colors.white,
+
                     borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
-                          "ADD NEW TASK",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                    child: Form(
+                      key: _formKey  ,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text(
+                            "ADD NEW TASK",
+                            style: TextStyle(color: Colors.black),
+                          ),
 
-                        TextFormField(
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
 
-                          controller: taskNameController,
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                           // fillColor: Colors.white,
-                            //  filled: true,
-                              labelText: "Enter Task Name",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              )),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter TaskName";
-                            }
-                          },
-                        ),
-                        RawMaterialButton(
+                              controller: taskNameController,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                               // fillColor: Colors.white,
+                                //  filled: true,
+                                  labelText: "Enter Task Name",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  )),
+                              validator: (value) {
+                                if (value==null || value.isEmpty) {
+                                  return "Please enter TaskName";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          RawMaterialButton(
                             fillColor: Colors.blue,
                             splashColor: Colors.blueAccent,
                             shape: StadiumBorder(),
                             onPressed: () {
-                              saveTask(context);
+                              if (taskNameController.text.trim().isNotEmpty) {
+                                // Task name is not empty, proceed to save
+                                saveTask(context);
+                              }
+                              else {
+                                // Show an error message or handle the case when the task name is empty
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Error'),
+                                      content: const Text('Please enter Task Name before submitting.'),
+                                      actions: <Widget>[
+                                        ElevatedButton(
+                                          child: const Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 8,
-                                horizontal: 20
+                                horizontal: 20,
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.save_rounded,color: Colors.white,),
-                                  SizedBox(width: 8,),
-                                  Text("Submit Task",style: TextStyle(color: Colors.white),),
+                                  Icon(Icons.save_rounded, color: Colors.white),
+                                  SizedBox(width: 8),
+                                  Text("Submit Task", style: TextStyle(color: Colors.white)),
                                 ],
                               ),
-                            ))
-                      ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
