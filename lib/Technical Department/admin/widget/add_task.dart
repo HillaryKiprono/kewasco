@@ -7,7 +7,6 @@ import '../resource/app_colors.dart';
 import '../resource/app_padding.dart';
 import 'package:http/http.dart' as http;
 
-
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
 
@@ -16,11 +15,10 @@ class AddTask extends StatefulWidget {
 }
 
 class AddTaskState extends State {
-  final _formKey=GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   int touchedIndex = -1;
 
   TextEditingController taskNameController = TextEditingController();
-
 
   // Show dialog for successful insertion of activity
   void showSuccessDialog(BuildContext context) {
@@ -69,7 +67,6 @@ class AddTaskState extends State {
   Future<void> saveTask(BuildContext context) async {
     TaskModel taskModel = TaskModel(
       taskNameController.text.trim(),
-
     );
     try {
       var res = await http.post(
@@ -100,8 +97,6 @@ class AddTaskState extends State {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -128,14 +123,12 @@ class AddTaskState extends State {
               Expanded(
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child:
-                  Container(
+                  child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
-
-                    borderRadius: BorderRadius.circular(20)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
                     child: Form(
-                      key: _formKey  ,
+                      key: _formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -143,23 +136,21 @@ class AddTaskState extends State {
                             "ADD NEW TASK",
                             style: TextStyle(color: Colors.black),
                           ),
-
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-
                               controller: taskNameController,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                               // fillColor: Colors.white,
-                                //  filled: true,
+                                  // fillColor: Colors.white,
+                                  //  filled: true,
                                   labelText: "Enter Task Name",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   )),
                               validator: (value) {
-                                if (value==null || value.isEmpty) {
-                                  return "Please enter TaskName";
+                                if (value!.isEmpty) {
+                                  return "Please enter Task Name";
                                 }
                                 return null;
                               },
@@ -170,29 +161,8 @@ class AddTaskState extends State {
                             splashColor: Colors.blueAccent,
                             shape: StadiumBorder(),
                             onPressed: () {
-                              if (taskNameController.text.trim().isNotEmpty) {
-                                // Task name is not empty, proceed to save
+                              if (_formKey.currentState!.validate()) {
                                 saveTask(context);
-                              }
-                              else {
-                                // Show an error message or handle the case when the task name is empty
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Error'),
-                                      content: const Text('Please enter Task Name before submitting.'),
-                                      actions: <Widget>[
-                                        ElevatedButton(
-                                          child: const Text('OK'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
                               }
                             },
                             child: const Padding(
@@ -205,7 +175,8 @@ class AddTaskState extends State {
                                 children: [
                                   Icon(Icons.save_rounded, color: Colors.white),
                                   SizedBox(width: 8),
-                                  Text("Submit Task", style: TextStyle(color: Colors.white)),
+                                  Text("Submit Task",
+                                      style: TextStyle(color: Colors.white)),
                                 ],
                               ),
                             ),

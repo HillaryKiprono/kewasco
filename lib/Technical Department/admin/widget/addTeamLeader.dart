@@ -20,6 +20,7 @@ class AddNewTeamLeader extends StatefulWidget {
 }
 
 class _AddNewTeamLeaderState extends State<AddNewTeamLeader> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController teamLeaderNameController = TextEditingController();
   TextEditingController teamLeaderPasswordController=TextEditingController();
 
@@ -119,63 +120,86 @@ class _AddNewTeamLeaderState extends State<AddNewTeamLeader> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
-                          "ADD TEAM LEADER",
-                          style: TextStyle(color: Colors.black),
-                        ),
-
-
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: teamLeaderNameController,
-                            cursorColor: Colors.greenAccent,
-                            maxLines: 2,
-                            decoration: InputDecoration(
+                    child:
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text(
+                            "ADD TEAM LEADER",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: teamLeaderNameController,
+                              cursorColor: Colors.greenAccent,
+                              maxLines: 2,
+                              decoration: InputDecoration(
                                 labelText: "Enter Team Leader Name",
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20))),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Please enter Team Leader Name";
+                                }
+                                return null;
+                              },
+                            ),
                           ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            obscureText: true,
-                            controller: teamLeaderPasswordController,
-                            cursorColor: Colors.greenAccent,
-                            decoration: InputDecoration(
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              obscureText: true,
+                              controller: teamLeaderPasswordController,
+                              cursorColor: Colors.greenAccent,
+                              decoration: InputDecoration(
                                 labelText: "Enter Team Leader Password",
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20))),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Please enter Team Leader Password";
+                                }
+                                return null;
+                              },
+                            ),
                           ),
-                        ),
-                        RawMaterialButton(
+                          RawMaterialButton(
                             fillColor: Colors.blue,
                             splashColor: Colors.blueAccent,
                             shape: StadiumBorder(),
                             onPressed: () {
-                              saveTeamLeader();
+                              if (_formKey.currentState!.validate()) {
+                                saveTeamLeader();
+                              }
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 20
+                                vertical: 8,
+                                horizontal: 20,
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.save_rounded,color: Colors.white,),
-                                  SizedBox(width: 8,),
-                                  Text("Submit Team leader",style: TextStyle(color: Colors.white),),
+                                  Icon(Icons.save_rounded, color: Colors.white),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "Submit Team leader",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ],
                               ),
-                            ))
-                      ],
-                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ),
                 ),
               ),
