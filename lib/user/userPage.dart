@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:kewasco/user/storeditems.dart';
 import 'package:kewasco/user/viewJobCardFieldData.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../Technical Department/api_endpoints/api_connections.dart';
 import '../controller/simple_ui_controller.dart';
 import 'components/singleTextArea.dart';
@@ -54,21 +55,46 @@ class _NRWPageState extends State<NRWPage> {
   List<Map<String, dynamic>> _insertedTaskNames = [];
   List<Map<String, dynamic>> _insertedWorkerNames = [];
 
+
   void _getLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setState(() {
-        latitudeController.text = position.latitude.toString();
-        longitudeController.text = position.longitude.toString();
-        initialLatitudes = latitudeController.text;
-        initialLongtitudes = longitudeController.text.toString();
-      });
-    } catch (e) {
-      print("Error: $e");
+    var status = await Permission.location.request();
+    if (status.isGranted) {
+      // Location permissions granted, proceed with obtaining location.
+      try {
+            Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high,
+            );
+            setState(() {
+              latitudeController.text = position.latitude.toString();
+              longitudeController.text = position.longitude.toString();
+              initialLatitudes = latitudeController.text;
+              initialLongtitudes = longitudeController.text.toString();
+            });
+          } catch (e) {
+            print("Error: $e");
+          }
+    } else {
+      // Location permissions denied.
+      print("Location permissions denied");
     }
   }
+
+
+  // void _getLocation() async {
+  //   try {
+  //     Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high,
+  //     );
+  //     setState(() {
+  //       latitudeController.text = position.latitude.toString();
+  //       longitudeController.text = position.longitude.toString();
+  //       initialLatitudes = latitudeController.text;
+  //       initialLongtitudes = longitudeController.text.toString();
+  //     });
+  //   } catch (e) {
+  //     print("Error: $e");
+  //   }
+  // }
 
   Future<void> _selectStartDate(
       BuildContext context, DateTime initialDate) async {
@@ -698,30 +724,32 @@ class _NRWPageState extends State<NRWPage> {
               Row(
                 children: [
                   Expanded(
-                      child: SingleTextField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Northings Required';
-                          }
-                          return null; // Return null if the validation succeeds
-                        },
-                    title: "Northings",
-                    controller: longitudeController,
-                  )),
+                    child: SingleTextField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Northings Required';
+                        }
+                        return null; // Return null if the validation succeeds
+                      },
+                      title: "Northings",
+                      controller: longitudeController,
+                    ),
+                  ),
                   const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                      child: SingleTextField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Eastings Required';
-                          }
-                          return null; // Return null if the validation succeeds
-                        },
-                    title: "Eastings",
-                    controller: latitudeController,
-                  )),
+                    child: SingleTextField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Eastings Required';
+                        }
+                        return null; // Return null if the validation succeeds
+                      },
+                      title: "Eastings",
+                      controller: latitudeController,
+                    ),
+                  ),
                   const SizedBox(
                     width: 8,
                   ),
@@ -729,25 +757,28 @@ class _NRWPageState extends State<NRWPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: RawMaterialButton(
+                child: ElevatedButton(
                   onPressed: () {
                     _getLocation();
                   },
-                  fillColor: Colors.orangeAccent,
-                  // shape:  RoundedRectangleBorder(borderRadius: Radius.circular(20),),
-                  shape: StadiumBorder(),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.orangeAccent,
+                    shape: StadiumBorder(),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       "Click here to get Location",
                       style: GoogleFonts.aleo(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
               ),
+
               const SizedBox(
                 height: 8,
               ),
