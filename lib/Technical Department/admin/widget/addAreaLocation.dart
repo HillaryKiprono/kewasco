@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../../api_endpoints/api_connections.dart';
 import '../../model/areaLocationModel.dart';
+import '../resource/app_colors.dart';
 
 
 class AddAreaLocation extends StatefulWidget {
@@ -15,7 +16,7 @@ class AddAreaLocation extends StatefulWidget {
 }
 
 class _AddAreaLocationState extends State<AddAreaLocation> {
-
+  final _formKey = GlobalKey<FormState>();
   
 
   TextEditingController areaLocationNameController = TextEditingController();
@@ -140,10 +141,109 @@ class _AddAreaLocationState extends State<AddAreaLocation> {
 
   @override
   Widget build(BuildContext context) {
+   return Container(
+      height: 400,
+      width: double.infinity,
+      padding: const EdgeInsets.only(
+        // left: AppPadding.P10 / 2,
+        // right: AppPadding.P10 / 2,
+        // top: AppPadding.P10,
+        // bottom: AppPadding.P10
+      ),
+      child: Card(
+        color: AppColors.purpleLight,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: AspectRatio(
+          aspectRatio: 1.5,
+          child: Row(
+            children: <Widget>[
+              const SizedBox(
+                height: 18,
+              ),
+              Expanded(
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child:
+
+                    Form(
+                      key: _formKey,
+                      child:
+
+                      Column(
+                        children: [
+                          const CustomAppBar(),
+                          const SizedBox(
+                            height: 60,
+                          ),
+                          Column(
+                            children: [
+                              TextFormField(
+                                controller: areaLocationCodeController,
+                                cursorColor: Colors.greenAccent,
+                                decoration: InputDecoration(
+                                    labelText: "Enter Area Location Code",
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20))),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              TextFormField(
+                                controller: areaLocationNameController,
+                                cursorColor: Colors.greenAccent,
+                                decoration: InputDecoration(
+                                    labelText: "Enter Area Location Name",
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20))),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              RawMaterialButton(
+                                onPressed: () {
+                                  saveAreaLocation();
+                                },
+                                fillColor: Colors.blue,
+                                constraints:
+                                const BoxConstraints.tightFor(height: 40, width: 150),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  "Submit",
+                                  style: GoogleFonts.abel(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 24),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+
+
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
     return Scaffold(
       // bottomNavigationBar: const footer(),
       body: SingleChildScrollView(
-        child: Column(
+        child:
+        Column(
           children: [
             const CustomAppBar(),
             const SizedBox(

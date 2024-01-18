@@ -25,37 +25,10 @@ class AddWorkerState extends State {
   TextEditingController workerNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  // Future<void> saveWorker(BuildContext context) async {
-  //   FetchWorkerModel workerModel = FetchWorkerModel(
-  //     workerNameController.text.trim(),);
-  //   try {
-  //     var response = await http.post(
-  //         Uri.parse(API.submitWorker),
-  //         body: workerModel.tojson()
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       var submitResponseBody = jsonDecode(response.body);
-  //       if (submitResponseBody['success'] == true) {
-  //         workerNameController.clear();
-  //         // buttonClickMsg(context,QuickAlertType.success);
-  //
-  //       }
-  //       else
-  //         {
-  //           // buttonClickMsg(context, QuickAlertType.error);
-  //
-  //         }
-  //     }
-  //   }
-  //   catch (e) {
-  //     // buttonClickMsg(context, QuickAlertType.error);
-  //     print(e.toString());
-  //   }
-  // }
+
 
   Future<void> saveWorker(BuildContext context) async {
-    FetchWorkerModel workerModel = FetchWorkerModel(
+    AddWorkerModel workerModel = AddWorkerModel(
       workerNameController.text.trim(),
     );
     try {
@@ -64,19 +37,26 @@ class AddWorkerState extends State {
         body: workerModel.toJson(),
       );
 
+      // Print raw server response
+      print("Server Response: ${res.body}");
+
       if (res.statusCode == 200) {
-        var resBody = jsonDecode(res.body);
+        try {
+          var resBodyOfSaveCategory = jsonDecode(res.body);
 
-        if (resBody['success'] == true) {
-          // Show success message
-          print("Worker added successfully");
-          showSuccessDialog(context);
+          if (resBodyOfSaveCategory['success'] == true) {
+            // Show success message
+            showSuccessDialog(context);
 
-          // Reset text controllers to clear the entered data
-          workerNameController.clear();
-        } else {
-          // Show failure message
-          print("Failed to add worker: ${resBody['message']}");
+            // Reset text controllers to clear the entered data
+            workerNameController.clear();
+          } else {
+            // Show failure message
+            showFailureDialog(context);
+          }
+        } catch (e) {
+          // Handle JSON decoding error
+          print("Error decoding JSON: $e");
           showFailureDialog(context);
         }
       } else {
@@ -85,13 +65,12 @@ class AddWorkerState extends State {
         showFailureDialog(context);
       }
     } catch (e) {
-      // Show failure message for exceptions
+      // Handle general exception
       print("Check your connection");
       print(e.toString());
       showFailureDialog(context);
     }
   }
-
   // Show dialog for successful insertion of activity
   void showSuccessDialog(BuildContext context) {
     showDialog(
@@ -135,12 +114,7 @@ class AddWorkerState extends State {
     );
   }
 
-  void buttonClickMsg(BuildContext context, QuickAlertType quickAlertType) {
-    QuickAlert.show(
-      context: context,
-      type: quickAlertType,
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +152,7 @@ class AddWorkerState extends State {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+
                           const Text(
                             "ADD NEW WORKER",
                             style: TextStyle(color: Colors.black),
@@ -210,26 +185,6 @@ class AddWorkerState extends State {
                               if (_formKey.currentState!.validate()) {
                                 saveWorker(context);
                               }
-                              // else {
-                              //   // Show an error message or handle the case when the task name is empty
-                              //   showDialog(
-                              //     context: context,
-                              //     builder: (BuildContext context) {
-                              //       return AlertDialog(
-                              //         title: const Text('Error'),
-                              //         content: const Text('Please enter Worker Name before submitting.'),
-                              //         actions: <Widget>[
-                              //           ElevatedButton(
-                              //             child: const Text('OK'),
-                              //             onPressed: () {
-                              //               Navigator.of(context).pop();
-                              //             },
-                              //           ),
-                              //         ],
-                              //       );
-                              //     },
-                              //   );
-                              // }
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(

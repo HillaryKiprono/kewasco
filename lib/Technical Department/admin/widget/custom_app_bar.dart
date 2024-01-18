@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kewasco/views/loginDesktop.dart';
 
+import '../../../controller/simple_ui_controller.dart';
 import '../../api_endpoints/api_connections.dart';
 import '../resource/app_colors.dart';
 import '../resource/app_padding.dart';
@@ -35,6 +36,9 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
+
+  SimpleUIController controller = Get.put(SimpleUIController());
+
   late Future<void> generateExcelFuture;
   bool isLoading = false;
 
@@ -129,10 +133,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
         const SizedBox(width: AppPadding.P10),
 
-        const Padding(
+         Padding(
           padding: EdgeInsets.all(0),
           child: Text(
-            "TECHNICAL DEPARTMENT",
+
+              'Welcome, ${controller.authenticatedUsername}',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),

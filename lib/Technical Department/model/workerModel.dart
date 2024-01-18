@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-class FetchWorkerModel{
+class AddWorkerModel{
   String workerName;
 
-  FetchWorkerModel(this.workerName);
+  AddWorkerModel(this.workerName);
 
-  factory FetchWorkerModel.fromJson(Map<String,dynamic> json)=>
-  FetchWorkerModel(json['workerName']);
+  factory AddWorkerModel.fromJson(Map<String,dynamic> json)=>
+      AddWorkerModel(json['workerName']);
   Map<String,dynamic> toJson()=>{
     'workerName':workerName
   };

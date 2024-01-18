@@ -201,6 +201,9 @@ class _ViewAllAreaLocationState extends State<ViewAllAreaLocation> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const SizedBox(height: 6.0),
+                        Text("All Area Location"),
+                        const SizedBox(height: 6.0),
+
                         FractionallySizedBox(
                           widthFactor: 0.9,
                           child: DataTable(

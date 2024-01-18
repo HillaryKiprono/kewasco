@@ -5,6 +5,7 @@ import 'package:kewasco/Technical%20Department/admin/widget/add_task.dart';
 import 'package:kewasco/Technical%20Department/admin/widget/assignAreaLocation.dart';
 import '../resource/app_colors.dart';
 import '../resource/app_padding.dart';
+import '../widget/addAreaLocation.dart';
 import '../widget/add_worker.dart';
 import '../widget/responsive_layout.dart';
 
@@ -80,6 +81,7 @@ class _PanelLeftScreenState extends State<PanelLeftScreen> {
                 const AddTask(),
                 const AddWorker(),
                  AddNewTeamLeader(),
+                AddAreaLocation(),
                 const AssignAreaLocation(),
                   Padding(
                     padding: const EdgeInsets.only(
