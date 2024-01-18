@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:kewasco/views/loginDesktop.dart';
 
 import '../../api_endpoints/api_connections.dart';
 import '../resource/app_colors.dart';
@@ -36,7 +38,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
   late Future<void> generateExcelFuture;
   bool isLoading = false;
 
-
   List<Map<String, dynamic>> data = [];
 
   Future<List<Map<String, dynamic>>> fetchData() async {
@@ -49,6 +50,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       throw Exception('Failed to fetch data');
     }
   }
+
   Future<void> generateExcelFromXAMPP() async {
     try {
       setState(() {
@@ -95,7 +97,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       child: Row(children: [
         if (ResponsiveLayout.isComputer(context))
           Container(
-            margin:  EdgeInsets.all(AppPadding.P10),
+            margin: EdgeInsets.all(AppPadding.P10),
             height: double.infinity,
             decoration: const BoxDecoration(boxShadow: [
               BoxShadow(
@@ -127,27 +129,27 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
         const SizedBox(width: AppPadding.P10),
 
-          const Padding(
-           padding: EdgeInsets.all(0),
-            child:Text("TECHNICAL DEPARTMENT",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-
+        const Padding(
+          padding: EdgeInsets.all(0),
+          child: Text(
+            "TECHNICAL DEPARTMENT",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
+        ),
         const Spacer(),
 
         Center(
           child: isLoading
-              ? SpinKitWave(
-              color: Colors.blue
-          ) // Use SpinKitFadingCircle
+              ? SpinKitWave(color: Colors.blue) // Use SpinKitFadingCircle
               : ElevatedButton(
-            onPressed: () {
-              setState(() {
-                // Reset the Future when the button is pressed again
-                generateExcelFuture = generateExcelFromXAMPP();
-              });
-            },
-            child: Text("Generate Excel"),
-          ),
+                  onPressed: () {
+                    setState(() {
+                      // Reset the Future when the button is pressed again
+                      generateExcelFuture = generateExcelFromXAMPP();
+                    });
+                  },
+                  child: Text("Generate Excel"),
+                ),
         ),
 
         Spacer(),
@@ -169,42 +171,36 @@ class _CustomAppBarState extends State<CustomAppBar> {
               right: 6,
               top: 6,
               child: CircleAvatar(
-
                 radius: 8,
                 child: Text(
                   "3",
-                  style: TextStyle(fontSize: 10, color: Colors.white),
+                  style: TextStyle(fontSize: 10, color: Colors.deepOrange),
                 ),
               ),
             ),
           ],
         ),
         if (!ResponsiveLayout.isPhoneLimit(context))
-          Container(
-            margin: const EdgeInsets.all(AppPadding.P10),
-            height: double.infinity,
-            decoration: const BoxDecoration(boxShadow: [
-              BoxShadow(
-                color: Colors.black45,
-                offset: Offset(0, 0),
-                spreadRadius: 1,
-                blurRadius: 10,
-              )
-            ], shape: BoxShape.circle),
-            child:  CircleAvatar(
-              backgroundColor: AppColors.orange,
-              radius: 35,
-              child: IconButton(onPressed: (){}, icon: Icon(Icons.people,color: Colors.white,size: 40,)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: RawMaterialButton(
+              onPressed: () {
+                Get.to(LoginDesktop());
+              },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              fillColor: Colors.deepOrangeAccent,
+              child: Text(
+                "Logout",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 20),
 
+              ),
             ),
           ),
       ]),
     );
   }
 }
-
-
-
 
 class GenerateJobCardExcell extends StatefulWidget {
   GenerateJobCardExcell({super.key});
@@ -214,10 +210,8 @@ class GenerateJobCardExcell extends StatefulWidget {
 }
 
 class _GenerateJobCardExcellState extends State<GenerateJobCardExcell> {
-
   late Future<void> generateExcelFuture;
   bool isLoading = false;
-
 
   List<Map<String, dynamic>> data = [];
 
@@ -231,28 +225,58 @@ class _GenerateJobCardExcellState extends State<GenerateJobCardExcell> {
       throw Exception('Failed to fetch data');
     }
   }
+
+  // Future<void> generateExcelFromXAMPP() async {
+  //   try {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //     data = await fetchData();
+  //     final excelGenerator = ExcelGenerator(data);
+  //     await excelGenerator.generateExcelDocument();
+  //
+  //     // Show the confirmation success dialog
+  //     // showDialog(
+  //     //   context: context,
+  //     //   builder: (BuildContext context) {
+  //     //     return const ConfirmationSuccess(
+  //     //         reactColor: Colors.yellow,
+  //     //         bubbleColors: [],
+  //     //         numofBubbles: 35,
+  //     //         maxBubbleRadius: 8,
+  //     //         child: Text("VOILA!",
+  //     //             style: TextStyle(color: Colors.black, fontSize: 18)));
+  //     //
+  //     //   },
+  //     // );
+  //   } catch (e) {
+  //     // Handle error if fetching data or generating Excel fails
+  //     print('Error generating Excel: $e');
+  //   } finally {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
+
   Future<void> generateExcelFromXAMPP() async {
     try {
       setState(() {
         isLoading = true;
       });
+
       data = await fetchData();
       final excelGenerator = ExcelGenerator(data);
       await excelGenerator.generateExcelDocument();
-      // Show the confirmation success dialog
-      // showDialog(
-      //   context: context,
-      //   builder: (BuildContext context) {
-      //     return const ConfirmationSuccess(
-      //         reactColor: Colors.yellow,
-      //         bubbleColors: [],
-      //         numofBubbles: 35,
-      //         maxBubbleRadius: 8,
-      //         child: Text("VOILA!",
-      //             style: TextStyle(color: Colors.black, fontSize: 18)));
-      //
-      //   },
-      // );
+
+      // Show success message using SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Excel sheet generated successfully!'),
+          duration: Duration(seconds: 2), // Adjust the duration as needed
+        ),
+      );
+
     } catch (e) {
       // Handle error if fetching data or generating Excel fails
       print('Error generating Excel: $e');
@@ -263,6 +287,7 @@ class _GenerateJobCardExcellState extends State<GenerateJobCardExcell> {
     }
   }
 
+
   @override
   void initState() {
     super.initState();
@@ -270,31 +295,26 @@ class _GenerateJobCardExcellState extends State<GenerateJobCardExcell> {
     generateExcelFuture = generateExcelFromXAMPP();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:
       Center(
         child: isLoading
-            ? SpinKitWave(
-            color: Colors.blue
-        ) // Use SpinKitFadingCircle
+            ? SpinKitWave(color: Colors.blue) // Use SpinKitFadingCircle
             : ElevatedButton(
-          onPressed: () {
-            setState(() {
-              // Reset the Future when the button is pressed again
-              generateExcelFuture = generateExcelFromXAMPP();
-            });
-          },
-          child: Text("Generate Excel"),
-        ),
+                onPressed: () {
+                  setState(() {
+                    // Reset the Future when the button is pressed again
+                    generateExcelFuture = generateExcelFromXAMPP();
+                  });
+                },
+                child: Text("Generate Excel"),
+              ),
       ),
     );
   }
 }
-
-
 
 class ExcelGenerator {
   List<Map<String, dynamic>> data;
@@ -328,41 +348,71 @@ class ExcelGenerator {
     ];
 
     for (var col = 0; col < headers.length; col++) {
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0)).value = headers[col];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0))
+          .value = headers[col];
     }
 
     // Add data rows to the sheet
     for (var row = 0; row < data.length; row++) {
       final rowData = data[row];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: row + 1)).value = rowData['accountNo'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row + 1)).value = rowData['dateStarted'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: row + 1)).value = rowData['timeStarted'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: row + 1)).value = rowData['department'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: row + 1)).value = rowData['section'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: row + 1)).value = rowData['selectedTaskName'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: row + 1)).value = rowData['workLocation'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: row + 1)).value = rowData['northings'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 8, rowIndex: row + 1)).value = rowData['eastings'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 9, rowIndex: row + 1)).value = rowData['workStatus'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 10, rowIndex: row + 1)).value = rowData['dateCompleted'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 11, rowIndex: row + 1)).value = rowData['timeCompleted'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 12, rowIndex: row + 1)).value = rowData['workDescription'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 13, rowIndex: row + 1)).value = rowData['material'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 14, rowIndex: row + 1)).value = rowData['assignedWorker'];
-      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 15, rowIndex: row + 1)).value = rowData['username'];
-
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: row + 1))
+          .value = rowData['accountNo'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row + 1))
+          .value = rowData['dateStarted'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: row + 1))
+          .value = rowData['timeStarted'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: row + 1))
+          .value = rowData['department'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: row + 1))
+          .value = rowData['section'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: row + 1))
+          .value = rowData['selectedTaskName'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: row + 1))
+          .value = rowData['workLocation'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: row + 1))
+          .value = rowData['northings'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 8, rowIndex: row + 1))
+          .value = rowData['eastings'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 9, rowIndex: row + 1))
+          .value = rowData['workStatus'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 10, rowIndex: row + 1))
+          .value = rowData['dateCompleted'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 11, rowIndex: row + 1))
+          .value = rowData['timeCompleted'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 12, rowIndex: row + 1))
+          .value = rowData['workDescription'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 13, rowIndex: row + 1))
+          .value = rowData['material'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 14, rowIndex: row + 1))
+          .value = rowData['assignedWorker'];
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 15, rowIndex: row + 1))
+          .value = rowData['username'];
     }
-
 
     // Save the Excel file
     final directory = await getApplicationDocumentsDirectory();
     //   final filePath = '${directory.path}/JobCard Report.xlsx';
     final filePath = 'C:\\Users\\Developer\\Documents\\JobCard Report.xlsx';
 
-
     final file = File(filePath);
     await file.writeAsBytes(excel.encode()!); // Use non-nullable List<int>
-
 
     // Open the generated Excel file using the default app for .xlsx files
     if (await file.exists()) {

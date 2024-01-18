@@ -16,6 +16,8 @@ class AssignAreaLocation extends StatefulWidget {
 }
 
 class _AssignAreaLocationState extends State<AssignAreaLocation> {
+  final _formKey = GlobalKey<FormState>();
+
   String? selectedTeamLeaderName;
   String? selectedAreaLocationName;
 
@@ -200,95 +202,112 @@ class _AssignAreaLocationState extends State<AssignAreaLocation> {
                         ,
                         borderRadius: BorderRadius.circular(20)),
                     child:
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
-                          "ASSIGN AREA LOCATION",
-                          style: TextStyle(color: Colors.black),
-                        ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text(
+                            "ASSIGN AREA LOCATION",
+                            style: TextStyle(color: Colors.black),
+                          ),
 
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)
-                                )
-                            ),
-                            value: selectedTeamLeaderName,
-                            hint: const Text('Select Team Leader'),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedTeamLeaderName = newValue;
-                              });
-                            },
-                            items: teamLeadersList.map((String teamLeader) {
-                              return DropdownMenuItem<String>(
-                                value: teamLeader,
-                                child: Text(teamLeader),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                  )
+                              ),
 
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)
-                                )
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Please Select Team Leader";
+                                }
+                                return null;
+                              },
+                              value: selectedTeamLeaderName,
+                              hint: const Text('Select Team Leader'),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedTeamLeaderName = newValue;
+                                });
+                              },
+                              items: teamLeadersList.map((String teamLeader) {
+                                return DropdownMenuItem<String>(
+                                  value: teamLeader,
+                                  child: Text(teamLeader),
+                                );
+                              }).toList(),
                             ),
-                            value: selectedAreaLocationName,
-                            hint: const Text('Select Area Location'),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedAreaLocationName = newValue;
-                              });
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                  )
+                              ),
+                              value: selectedAreaLocationName,
+
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Please Select Area Location Task Name";
+                                }
+                                return null;
+                              },
+                              hint: const Text('Select Area Location'),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedAreaLocationName = newValue;
+                                });
+                              },
+                              items: areaLocationList.map((String areaLocation) {
+                                return DropdownMenuItem<String>(
+                                  value: areaLocation,
+                                  child: Text(areaLocation),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          RawMaterialButton(
+                            onPressed: () {
+                              // Handle submit button click
+                              if (selectedTeamLeaderName != null &&
+                                  selectedAreaLocationName != null) {
+                                // Perform the desired action
+                                // For example, you can call a function to submit data
+                                saveAssignedAreaLocation(
+                                  selectedTeamLeaderName!,
+                                  selectedAreaLocationName!,
+                                );
+                              } else {
+                                // Show an error dialog or handle validation
+                                showFailureDialogResponse(context);
+                              }
                             },
-                            items: areaLocationList.map((String areaLocation) {
-                              return DropdownMenuItem<String>(
-                                value: areaLocation,
-                                child: Text(areaLocation),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        RawMaterialButton(
-                          onPressed: () {
-                            // Handle submit button click
-                            if (selectedTeamLeaderName != null &&
-                                selectedAreaLocationName != null) {
-                              // Perform the desired action
-                              // For example, you can call a function to submit data
-                              saveAssignedAreaLocation(
-                                selectedTeamLeaderName!,
-                                selectedAreaLocationName!,
-                              );
-                            } else {
-                              // Show an error dialog or handle validation
-                              showFailureDialogResponse(context);
-                            }
-                          },
-                          fillColor: Colors.blue,
-                          constraints: const BoxConstraints.tightFor(height: 40, width: 150),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            "Submit Location",
-                            style: GoogleFonts.abel(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 20,
+                            fillColor: Colors.blue,
+                            constraints: const BoxConstraints.tightFor(height: 40, width: 150),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              "Submit Location",
+                              style: GoogleFonts.abel(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -403,7 +422,7 @@ class CustomAppBar extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       decoration:  BoxDecoration(
         color: Colors.blue.withOpacity(.9),
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(50), topLeft: Radius.circular(100)),
       ),
       child: const Column(
