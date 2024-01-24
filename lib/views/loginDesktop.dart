@@ -28,21 +28,24 @@ class _LoginDesktopState extends State<LoginDesktop> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   Future<void> fetchTeamLeadersFromServer() async {
     try {
       final response2 = await http.get(Uri.parse(API.fetchAllTeamLeaders));
 
       if (response2.statusCode == 200) {
-        print("Communicating to server correctly");
+        print("Communicating to the server correctly");
 
         final dynamic responseData2 = jsonDecode(response2.body);
-        print("Team Leaders Response  from server: $responseData2");
+        print("Team Leaders Response from the server: $responseData2");
 
         if (responseData2 is Map<String, dynamic> &&
             responseData2.containsKey('data')) {
           final dynamic data2 = responseData2['data'];
 
           if (data2 is List) {
+            bool loginSuccessful = false; // Flag to check if any valid login occurs
+
             for (var item2 in data2) {
               if (item2 is Map<String, dynamic> &&
                   item2.containsKey('teamLeaderName') &&
@@ -59,25 +62,26 @@ class _LoginDesktopState extends State<LoginDesktop> {
 
                 // Check login credentials
                 if (user.teamLeaderName == nameController.text &&
-                    user.password == passwordController.text && user.userRole=="admin"){
-                  _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+                    user.password == passwordController.text &&
+                    ["admin", "user"].contains(user.userRole)) {
+                  // Set authenticated user information
+                  _handleSuccessfulLogin(user);
 
-                  Get.off(() => AdminDashboard(username: '',));
+                  // Show success alert if not shown before
+                  if (!loginSuccessful) {
+                    _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+                    loginSuccessful = true; // Set the flag to true
+                  }
 
-                  // Successful login
-                  // _handleSuccessfulLogin(user);
-                  return;
-                }
-                else if(user.teamLeaderName == nameController.text &&
-                    user.password == passwordController.text && user.userRole=="user")
-                  {
-                      _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
-
+                  // Navigate to the appropriate screen
+                  if (user.userRole == "admin") {
+                    Get.off(() => AdminDashboard(username: '${user.teamLeaderName}'));
+                  } else {
                     Get.to(() => NRWPage());
                   }
-                else{
-                  _showAlert("Login fails", "Invalid credentials");
-                  print("***********************validation fails***********************");
+
+                  // Break out of the loop once a valid user is found
+                  break;
                 }
               }
             }
@@ -95,28 +99,22 @@ class _LoginDesktopState extends State<LoginDesktop> {
     }
   }
 
-  // void _handleSuccessfulLogin(User user) {
-  //   simpleUIController.setAuthenticatedUsername(user.teamLeaderName);
-  //
-  //   // You can navigate to different screens based on user role
-  //   if (user.userRole == 'admin') {
-  //     // Navigate to admin screen
-  //     Get.off(() => AdminDashboard(username: '',));
-  //     // Show success alert
-  //     _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
-  //   } else if(user.userRole == "user") {
-  //     // Navigate to user screen
-  //     Get.to(() => NRWPage());
-  //     // Show success alert
-  //     _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
-  //   } else {
-  //     // Invalid credentials
-  //     _showAlert('Invalid Credentials', 'Please check your username and password.');
-  //     print("Wrong");
-  //   }
-  // }
+  void _handleSuccessfulLogin(User user) {
+    simpleUIController.setAuthenticatedUsername(user.teamLeaderName);
 
-// Show an alert dialog for both success and invalid credentials
+    // You can navigate to different screens based on user role
+    if (user.userRole == 'admin') {
+      // Navigate to admin screen
+      Get.off(() => AdminDashboard(username: '',));
+    } else if (user.userRole == 'user') {
+      // Navigate to user screen
+      Get.to(() => NRWPage());
+    }
+
+    // Show success alert
+    // _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+  }
+
   void _showAlert(String title, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

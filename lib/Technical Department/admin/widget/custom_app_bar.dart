@@ -135,9 +135,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
          Padding(
           padding: EdgeInsets.all(0),
-          child: Text(
-
-              'Welcome, ${controller.authenticatedUsername}',
+          child:
+          Text(
+            'Welcome, ${controller.authenticatedUsername}',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
