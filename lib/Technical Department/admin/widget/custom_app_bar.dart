@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kewasco/views/loginDesktop.dart';
+import 'package:open_file/open_file.dart';
 
 import '../../../controller/simple_ui_controller.dart';
 import '../../api_endpoints/api_connections.dart';
@@ -91,7 +92,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   void initState() {
     super.initState();
     // Initialize the Future in initState so that it's only called once
-    generateExcelFuture = generateExcelFromXAMPP();
+    // generateExcelFuture = generateExcelFromXAMPP();
   }
 
   @override
@@ -147,11 +148,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
           child: isLoading
               ? SpinKitWave(color: Colors.blue) // Use SpinKitFadingCircle
               : ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      // Reset the Future when the button is pressed again
-                      generateExcelFuture = generateExcelFromXAMPP();
-                    });
+                  onPressed: () { setState(() {
+                    // Call generateExcelFromXAMPP when the button is pressed
+                    generateExcelFromXAMPP();
+                  });
                   },
                   child: Text("Generate Excel"),
                 ),
@@ -278,9 +278,16 @@ class _GenerateJobCardExcellState extends State<GenerateJobCardExcell> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Excel sheet generated successfully!'),
-          duration: Duration(seconds: 2), // Adjust the duration as needed
+          duration: Duration(seconds: 2),
         ),
       );
+
+      // Open the generated Excel file using the open_file package
+      final directory = await getApplicationDocumentsDirectory();
+      final fileName = 'JobCard_Report.xlsx';
+      final filePath = '${directory.path}/$fileName';
+
+      OpenFile.open(filePath);
 
     } catch (e) {
       // Handle error if fetching data or generating Excel fails
@@ -291,6 +298,7 @@ class _GenerateJobCardExcellState extends State<GenerateJobCardExcell> {
       });
     }
   }
+
 
 
   @override
@@ -410,18 +418,33 @@ class ExcelGenerator {
           .cell(CellIndex.indexByColumnRow(columnIndex: 15, rowIndex: row + 1))
           .value = rowData['username'];
     }
-
-    // Save the Excel file
+    // Specify the directory path
     final directory = await getApplicationDocumentsDirectory();
-    //   final filePath = '${directory.path}/JobCard Report.xlsx';
-    final filePath = 'C:\\Users\\Developer\\Documents\\JobCard Report.xlsx';
 
+    // Update the filename with the desired name (e.g., 'JobCard_Report.xlsx')
+    final fileName = 'JobCard_Report.xlsx';
+
+    // Combine the directory and filename to create the full path
+    final filePath = '${directory.path}/$fileName';
+
+    // Define the file variable before using it
     final file = File(filePath);
-    await file.writeAsBytes(excel.encode()!); // Use non-nullable List<int>
+
+
+    // Write Excel data to the file
+    await file.writeAsBytes(excel.encode()!);
 
     // Open the generated Excel file using the default app for .xlsx files
     if (await file.exists()) {
-      await Process.run('open', [filePath]);
+      // Adjust the method for opening the file based on the platform
+      if (Platform.isWindows) {
+
+        // For Windows, you can use the 'start' command
+        await Process.run('start', [filePath], runInShell: true);
+      } else {
+        // For other platforms, use a platform-specific method to open the file
+        // You can explore packages like 'open_file' for cross-platform support
+      }
     }
   }
 }

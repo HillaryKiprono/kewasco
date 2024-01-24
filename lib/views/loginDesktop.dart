@@ -69,16 +69,20 @@ class _LoginDesktopState extends State<LoginDesktop> {
 
                   // Show success alert if not shown before
                   if (!loginSuccessful) {
-                    _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+                    // _showAlertDialog('Login Successful', 'Welcome, ${user.teamLeaderName}!');
                     loginSuccessful = true; // Set the flag to true
                   }
+                  else
+                    {
+                      _showAlertDialog("Login Fails", "Invalid Credentials");
+                    }
 
-                  // Navigate to the appropriate screen
-                  if (user.userRole == "admin") {
-                    Get.off(() => AdminDashboard(username: '${user.teamLeaderName}'));
-                  } else {
-                    Get.to(() => NRWPage());
-                  }
+                  // // Navigate to the appropriate screen
+                  // if (user.userRole == "admin") {
+                  //   Get.off(() => AdminDashboard(username: '${user.teamLeaderName}'));
+                  // } else {
+                  //   Get.to(() => NRWPage());
+                  // }
 
                   // Break out of the loop once a valid user is found
                   break;
@@ -86,13 +90,13 @@ class _LoginDesktopState extends State<LoginDesktop> {
               }
             }
           } else {
-            print("Invalid data structure for 'data' field: $data2");
+            _showAlertDialog("Login Fails", "Invalid Credentials");
           }
         } else {
-          print("Invalid data structure: $responseData2");
+          _showAlertDialog("Login Fails", "Invalid Credentials");
         }
       } else {
-        print("Failed to connect");
+        _showAlertDialog("Login Fails", "Invalid Credentials");
       }
     } catch (e) {
       print(e.toString());
@@ -102,31 +106,39 @@ class _LoginDesktopState extends State<LoginDesktop> {
   void _handleSuccessfulLogin(User user) {
     simpleUIController.setAuthenticatedUsername(user.teamLeaderName);
 
-    // You can navigate to different screens based on user role
+    // Navigate to the appropriate screen
     if (user.userRole == 'admin') {
-      // Navigate to admin screen
+       _showAlertDialog('Login Successful', 'Welcome, ${user.teamLeaderName}!');
       Get.off(() => AdminDashboard(username: '',));
     } else if (user.userRole == 'user') {
-      // Navigate to user screen
+      _showAlertDialog('Login Successful', 'Welcome, ${user.teamLeaderName}!');
       Get.to(() => NRWPage());
+    } else if(!(user.userRole == 'admin') && (!(user.userRole == 'user'))) {
+      _showAlertDialog('Invalid Credentials', 'Please check your username and password.');
     }
-
-    // Show success alert
-    // _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+    else
+      {
+        _showAlertDialog('Invalid Credentials', 'Please check your username and password.');
+      }
   }
 
-  void _showAlert(String title, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: Duration(seconds: 2), // Adjust the duration as needed
-        action: SnackBarAction(
-          label: 'OK',
-          onPressed: () {
-            // Perform any action when the user clicks on the action button
-          },
-        ),
-      ),
+  void _showAlertDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the AlertDialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 
