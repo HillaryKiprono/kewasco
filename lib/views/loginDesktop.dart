@@ -59,10 +59,25 @@ class _LoginDesktopState extends State<LoginDesktop> {
 
                 // Check login credentials
                 if (user.teamLeaderName == nameController.text &&
-                    user.password == passwordController.text) {
+                    user.password == passwordController.text && user.userRole=="admin"){
+                  _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+
+                  Get.off(() => AdminDashboard(username: '',));
+
                   // Successful login
-                  _handleSuccessfulLogin(user);
+                  // _handleSuccessfulLogin(user);
                   return;
+                }
+                else if(user.teamLeaderName == nameController.text &&
+                    user.password == passwordController.text && user.userRole=="user")
+                  {
+                      _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+
+                    Get.to(() => NRWPage());
+                  }
+                else{
+                  _showAlert("Login fails", "Invalid credentials");
+                  print("***********************validation fails***********************");
                 }
               }
             }
@@ -80,26 +95,50 @@ class _LoginDesktopState extends State<LoginDesktop> {
     }
   }
 
-  void _handleSuccessfulLogin(User user) {
-    simpleUIController.setAuthenticatedUsername(user.teamLeaderName);
+  // void _handleSuccessfulLogin(User user) {
+  //   simpleUIController.setAuthenticatedUsername(user.teamLeaderName);
+  //
+  //   // You can navigate to different screens based on user role
+  //   if (user.userRole == 'admin') {
+  //     // Navigate to admin screen
+  //     Get.off(() => AdminDashboard(username: '',));
+  //     // Show success alert
+  //     _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+  //   } else if(user.userRole == "user") {
+  //     // Navigate to user screen
+  //     Get.to(() => NRWPage());
+  //     // Show success alert
+  //     _showAlert('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+  //   } else {
+  //     // Invalid credentials
+  //     _showAlert('Invalid Credentials', 'Please check your username and password.');
+  //     print("Wrong");
+  //   }
+  // }
 
-    // You can navigate to different screens based on user role
-    if (user.userRole == 'admin') {
-      // Navigate to admin screen
-
-      Get.off(() => AdminDashboard(username: '',));
-    } else {
-      // Navigate to user screen
-      Get.to(() => NRWPage());
-    }
+// Show an alert dialog for both success and invalid credentials
+  void _showAlert(String title, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2), // Adjust the duration as needed
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            // Perform any action when the user clicks on the action button
+          },
+        ),
+      ),
+    );
   }
 
 
 
   @override
   void initState() {
-   fetchTeamLeadersFromServer();
-    super.initState();
+   // fetchTeamLeadersFromServer();
+     super.initState();
+
   }
 
 
