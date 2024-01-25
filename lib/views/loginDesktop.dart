@@ -148,10 +148,13 @@ class _LoginDesktopState extends State<LoginDesktop> {
                     _showAlertDialog("Success", "Login Successfully as Admin");
                     Get.off(() => NRWPage());
                   }
+                  _showAlertDialog("Success", "Login Successfully as Admin");
+
 
                   // Set the flag to true since a valid login occurred
                   loginSuccessful = true;
                   break;
+
                 }
               }
             }
