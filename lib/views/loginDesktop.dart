@@ -161,7 +161,7 @@ class _LoginDesktopState extends State<LoginDesktop> {
 
             // If no valid login occurs, show invalid credentials alert
             if (!loginSuccessful) {
-              print('Invalid credentials...');
+              print('Invalid credentials or network connection issues...');
               _showAlertDialog(
                   'Invalid Credentials', 'Please check your username and password.');
             }
