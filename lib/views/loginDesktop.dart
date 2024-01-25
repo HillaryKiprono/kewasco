@@ -139,16 +139,16 @@ class _LoginDesktopState extends State<LoginDesktop> {
                       user.password == passwordController.text &&
                       user.userRole == "admin") {
                     print('Logging in as admin...');
-                    _showAlertDialog("Success", "Login Successfully as Admin");
+                    _showAlertDialog("Success", "Login Successfully welcome ${user.teamLeaderName}");
                     Get.off(() => AdminDashboard(username: ''));
                   } else if (user.teamLeaderName == nameController.text &&
                       user.password == passwordController.text &&
                       user.userRole == "user") {
                     print('Logging in as user...');
-                    _showAlertDialog("Success", "Login Successfully as Admin");
+                    _showAlertDialog("Success", "Login Successfully welcome ${user.teamLeaderName}");
                     Get.off(() => NRWPage());
                   }
-                  _showAlertDialog("Success", "Login Successfully as Admin");
+                  _showAlertDialog("Success", "Login Successfully welcome ${user.teamLeaderName}");
 
 
                   // Set the flag to true since a valid login occurred
