@@ -163,7 +163,7 @@ class _LoginDesktopState extends State<LoginDesktop> {
             if (!loginSuccessful) {
               print('Invalid credentials or network connection issues...');
               _showAlertDialog(
-                  'Invalid Credentials', 'Please check your username and password.');
+                  'Invalid Credentials', 'Please check your username and password.or network connection issues...');
             }
           }
         }
