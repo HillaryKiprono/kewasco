@@ -29,74 +29,6 @@ class _LoginDesktopState extends State<LoginDesktop> {
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
-
-  // Future<void> fetchTeamLeadersFromServer() async {
-  //   try {
-  //     final response2 = await http.get(Uri.parse(API.fetchAllTeamLeaders));
-  //
-  //     if (response2.statusCode == 200) {
-  //       print("Communicating to the server correctly");
-  //
-  //       final dynamic responseData2 = jsonDecode(response2.body);
-  //       print("Team Leaders Response from the server: $responseData2");
-  //
-  //       if (responseData2 is Map<String, dynamic> &&
-  //           responseData2.containsKey('data')) {
-  //         final dynamic data2 = responseData2['data'];
-  //
-  //         print('Received data from the server: $data2');
-  //
-  //         if (data2 is List) {
-  //           bool loginSuccessful = false; // Flag to check if any valid login occurs
-  //
-  //           for (var item2 in data2) {
-  //             if (item2 is Map<String, dynamic> &&
-  //                 item2.containsKey('teamLeaderName') &&
-  //                 item2.containsKey("password") &&
-  //                 item2.containsKey("userRole")) {
-  //               final row1 = {
-  //                 'teamLeaderName': item2['teamLeaderName'],
-  //                 'userRole': item2['userRole'],
-  //                 'password': item2['password'],
-  //               };
-  //
-  //               // Assuming that you have a User model class
-  //               User user = User.fromJson(row1);
-  //
-  //               // Check login credentials
-  //               // Check login credentials
-  //               if (user.teamLeaderName == nameController.text &&
-  //                   user.password == passwordController.text &&
-  //                   ["admin", "user"].contains(user.userRole)) {
-  //                 if(user.teamLeaderName == nameController.text &&
-  //                     user.password == passwordController.text && user.userRole=="admin"){
-  //                   print('Logging in as admin...');
-  //                   _showAlertDialog("Success", "Login Successfully as Admin");
-  //                   Get.off(() => AdminDashboard(username: ''));
-  //
-  //                 }
-  //                 else if(user.teamLeaderName == nameController.text &&
-  //                     user.password == passwordController.text && user.userRole=="user"){
-  //                   print('Logging in as user...');
-  //                   _showAlertDialog("Success", "Login Successfully as Admin");
-  //                   Get.off(() => NRWPage());
-  //
-  //                 }
-  //
-  //                 loginSuccessful = true;
-  //                 break;
-  //               }
-  //               else{
-  //                 _showAlertDialog("Fails", "Credentials miss matched");
-  //               }
-  //             }
-  //           }
-  //         }}}}
-  // catch(e){
-  //     print(e.toString());
-  // }
-  // }
   Future<void> fetchTeamLeadersFromServer() async {
     try {
       final response2 = await http.get(Uri.parse(API.fetchAllTeamLeaders));
@@ -111,11 +43,8 @@ class _LoginDesktopState extends State<LoginDesktop> {
             responseData2.containsKey('data')) {
           final dynamic data2 = responseData2['data'];
 
-          print('Received data from the server: $data2');
-
           if (data2 is List) {
-            // Flag to check if any valid login occurs
-            bool loginSuccessful = false;
+            bool loginSuccessful = false; // Flag to check if any valid login occurs
 
             for (var item2 in data2) {
               if (item2 is Map<String, dynamic> &&
@@ -135,41 +64,63 @@ class _LoginDesktopState extends State<LoginDesktop> {
                 if (user.teamLeaderName == nameController.text &&
                     user.password == passwordController.text &&
                     ["admin", "user"].contains(user.userRole)) {
-                  if (user.teamLeaderName == nameController.text &&
-                      user.password == passwordController.text &&
-                      user.userRole == "admin") {
-                    print('Logging in as admin...');
-                    _showAlertDialog("Success", "Login Successfully as Admin");
-                    Get.off(() => AdminDashboard(username: ''));
-                  } else if (user.teamLeaderName == nameController.text &&
-                      user.password == passwordController.text &&
-                      user.userRole == "user") {
-                    print('Logging in as user...');
-                    _showAlertDialog("Success", "Login Successfully as Admin");
-                    Get.off(() => NRWPage());
+                  // Set authenticated user information
+                  _handleSuccessfulLogin(user);
+
+                  // Show success alert if not shown before
+                  if (!loginSuccessful) {
+                    // _showAlertDialog('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+                    loginSuccessful = true; // Set the flag to true
+                  }
+                  else
+                  {
+                    _showAlertDialog("Login Fails", "Invalid Credentials");
                   }
 
-                  // Set the flag to true since a valid login occurred
-                  loginSuccessful = true;
+                  // // Navigate to the appropriate screen
+                  // if (user.userRole == "admin") {
+                  //   Get.off(() => AdminDashboard(username: '${user.teamLeaderName}'));
+                  // } else {
+                  //   Get.to(() => NRWPage());
+                  // }
+
+                  // Break out of the loop once a valid user is found
                   break;
                 }
               }
             }
-
-            // If no valid login occurs, show invalid credentials alert
-            if (!loginSuccessful) {
-              print('Invalid credentials...');
-              _showAlertDialog(
-                  'Invalid Credentials', 'Please check your username and password.');
-            }
+          } else {
+            _showAlertDialog("Login Fails", "Invalid Credentials");
           }
+        } else {
+          _showAlertDialog("Login Fails", "Invalid Credentials");
         }
+      } else {
+        _showAlertDialog("Login Fails", "Invalid Credentials");
       }
     } catch (e) {
       print(e.toString());
     }
   }
 
+  void _handleSuccessfulLogin(User user) {
+    simpleUIController.setAuthenticatedUsername(user.teamLeaderName);
+
+    // Navigate to the appropriate screen
+    if (user.userRole == 'admin') {
+      _showAlertDialog('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+      Get.off(() => AdminDashboard(username: '',));
+    } else if (user.userRole == 'user') {
+      _showAlertDialog('Login Successful', 'Welcome, ${user.teamLeaderName}!');
+      Get.to(() => NRWPage());
+    } else if(!(user.userRole == 'admin') && (!(user.userRole == 'user'))) {
+      _showAlertDialog('Invalid Credentials', 'Please check your username and password.');
+    }
+    else
+    {
+      _showAlertDialog('Invalid Credentials', 'Please check your username and password.');
+    }
+  }
 
   void _showAlertDialog(String title, String message) {
     showDialog(
@@ -437,7 +388,6 @@ class _LoginDesktopState extends State<LoginDesktop> {
   }
 
   // Login Button
-// Login Button
   Widget loginButton() {
     return SizedBox(
       width: double.infinity,
@@ -454,11 +404,10 @@ class _LoginDesktopState extends State<LoginDesktop> {
         onPressed: () {
           // Validate returns true if the form is valid, or false otherwise.
           if (_formKey.currentState!.validate()) {
-            // Call the method to fetch team leaders from the server
             fetchTeamLeadersFromServer();
           }
         },
-        child: const Text('Login', style: TextStyle(color: Colors.white, fontSize: 30)),
+        child: const Text('Login',style: TextStyle(color: Colors.white,fontSize: 30),),
       ),
     );
   }

@@ -9,6 +9,8 @@ class User {
     required this.password,
   });
 
+  // Other methods or constructors if needed
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       teamLeaderName: json['teamLeaderName'],
